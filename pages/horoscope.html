@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burç Yorumu - Rüya & Burç Atlası</title>
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/horoscope.css">
+    <script src="../scripts/main.js" defer></script>
+    <script src="../scripts/horoscope.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="main-nav">
+        <a href="./index.html" class="nav-logo">Rüya & Burç Atlası</a>
+        <div class="auth-buttons">
+            <button class="auth-btn login-btn">Giriş Yap</button>
+            <button class="auth-btn register-btn">Üye Ol</button>
+        </div>
+    </nav>
+
+    <div class="horoscope-container">
+        <div class="user-horoscope">
+            <div class="horoscope-header">
+                <h1>Günlük Burç Yorumunuz</h1>
+                <p class="current-date"></p>
+            </div>
+            <div class="horoscope-content">
+                <div class="sign-info">
+                    <img src="" alt="" class="sign-icon" id="userSignIcon">
+                    <h2 class="sign-name" id="userSignName">Burç</h2>
+                </div>
+                <div class="horoscope-text" id="dailyHoroscope">
+                    <!-- Burç yorumu buraya gelecek -->
+                    <p class="login-message">Günlük burç yorumunuzu görmek için lütfen giriş yapın.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="all-signs">
+            <h2>Tüm Burçlar</h2>
+            <div class="signs-grid">
+                <!-- Burç kartları dinamik olarak eklenecek -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Login/Register Modals (Aynı index.html'deki gibi) -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Giriş Yap</h2>
+            <form class="auth-form" id="loginForm">
+                <input type="email" placeholder="E-posta" required>
+                <input type="password" placeholder="Şifre" required>
+                <button type="submit" class="submit-btn">Giriş Yap</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Üye Ol</h2>
+            <form class="auth-form" id="registerForm">
+                <input type="text" placeholder="Ad Soyad" required>
+                <input type="email" placeholder="E-posta" required>
+                <div class="birth-date-container">
+                    <label for="birthDate">Doğum Tarihiniz:</label>
+                    <input type="date" id="birthDate" required>
+                </div>
+                <input type="password" placeholder="Şifre" required>
+                <input type="password" placeholder="Şifre Tekrar" required>
+                <button type="submit" class="submit-btn">Üye Ol</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html> 
