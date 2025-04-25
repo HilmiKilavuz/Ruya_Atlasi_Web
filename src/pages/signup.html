@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rüya Atlası - Üye Ol">
+    <title>Üye Ol - Rüya Atlası</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/auth.css">
+</head>
+<body class="auth-page">
+    <!-- Loading Screen -->
+    <div class="loading" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-icon">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-star"></i>
+            </div>
+            <span>Rüya Atlası</span>
+        </div>
+    </div>
+
+    <main class="auth-main">
+        <div class="auth-container-signup">
+            <div class="auth-content">
+                <a href="../../index.html" class="auth-logo">
+                    <i class="fas fa-moon"></i>
+                    Rüya Atlası
+                </a>
+                
+                <h1>Üye Ol</h1>
+                <p class="auth-description">Rüya Atlası'na katılın ve rüyalarınızın anlamını keşfedin.</p>
+
+                <form class="auth-form" id="signupForm">
+                    <div class="form-group">
+                        <label for="fullName">
+                            <i class="fas fa-user"></i>
+                            Ad Soyad
+                        </label>
+                        <input type="text" id="fullName" name="fullName" required 
+                               placeholder="Adınız ve soyadınız">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">
+                            <i class="fas fa-envelope"></i>
+                            E-posta
+                        </label>
+                        <input type="email" id="email" name="email" required 
+                               placeholder="ornek@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">
+                            <i class="fas fa-lock"></i>
+                            Şifre
+                        </label>
+                        <div class="password-input">
+                            <input type="password" id="password" name="password" required 
+                                   placeholder="En az 8 karakter">
+                            <button type="button" class="password-toggle">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="birthDate">
+                            <i class="fas fa-calendar"></i>
+                            Doğum Tarihi
+                        </label>
+                        <input type="date" id="birthDate" name="birthDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="zodiacSign">
+                            <i class="fas fa-star"></i>
+                            Burç
+                        </label>
+                        <select id="zodiacSign" name="zodiacSign" required>
+                            <option value="">Burcunuzu seçin</option>
+                            <option value="koc">Koç</option>
+                            <option value="boga">Boğa</option>
+                            <option value="ikizler">İkizler</option>
+                            <option value="yengec">Yengeç</option>
+                            <option value="aslan">Aslan</option>
+                            <option value="basak">Başak</option>
+                            <option value="terazi">Terazi</option>
+                            <option value="akrep">Akrep</option>
+                            <option value="yay">Yay</option>
+                            <option value="oglak">Oğlak</option>
+                            <option value="kova">Kova</option>
+                            <option value="balik">Balık</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="terms" required>
+                            <span class="checkbox-text">
+                                <a href="../pages/terms.html" target="_blank">Kullanım Koşulları</a>'nı ve 
+                                <a href="../pages/privacy.html" target="_blank">Gizlilik Politikası</a>'nı kabul ediyorum
+                            </span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="auth-submit">
+                        <i class="fas fa-user-plus"></i>
+                        Üye Ol
+                    </button>
+                </form>
+
+                <div class="auth-links">
+                    <p>Zaten üye misiniz? <a href="login.html">Giriş Yap</a></p>
+                </div>
+            </div>
+
+            <div class="auth-background">
+                <div class="floating-elements">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-moon"></i>
+                    <i class="fas fa-sun"></i>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="../js/auth.js"></script>
+</body>
+</html> 

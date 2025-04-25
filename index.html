@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rüya Atlası - Rüyalarınızı keşfedin ve burçlarınızla olan bağlantılarını öğrenin">
+    <title>Rüya Atlası - Rüya Yorumları ve Burç Analizleri</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="src/styles/main.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="src/assets/icons/favicon.png">
+    
+    <!-- Schema.org markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Rüya Atlası",
+        "description": "Rüya yorumları ve burç yorumları platformu",
+        "url": "https://www.ruyaatlasi.com"
+    }
+    </script>
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Ana içeriğe git</a>
+
+    <!-- Loading Screen -->
+    <div class="loading" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-icon">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-star"></i>
+            </div>
+            <span>Rüya Atlası</span>
+        </div>
+    </div>
+
+    <!-- Auth Buttons -->
+    <div class="auth-container">
+        <div class="auth-buttons">
+            <a href="src/pages/login.html" class="btn btn-login">
+                <i class="fas fa-user"></i>
+                Giriş Yap
+            </a>
+            <a href="src/pages/signup.html" class="btn btn-signup">
+                <i class="fas fa-user-plus"></i>
+                Üye Ol
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="split-layout">
+        <!-- Horoscope Section -->
+        <section class="split-section horoscope-split">
+            <div class="content-wrapper">
+                <h1>Burç Yorumları</h1>
+                <p class="section-description">Yıldızların size özel mesajlarını keşfedin. Günlük, haftalık ve aylık burç yorumlarıyla geleceğinize ışık tutun.</p>
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-star"></i>
+                        <span>Günlük Yorumlar</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-moon"></i>
+                        <span>Astrolojik Analizler</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-sun"></i>
+                        <span>Burç Uyumları</span>
+                    </div>
+                </div>
+                <a href="src/pages/horoscope.html" class="split-button">
+                    Burçları Keşfet
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="background-overlay"></div>
+            <div class="floating-elements">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
+            </div>
+        </section>
+
+        <!-- Dream Section -->
+        <section class="split-section dream-split">
+            <div class="content-wrapper">
+                <h1>Rüya Yorumları</h1>
+                <p class="section-description">Rüyalarınızın gizli anlamlarını keşfedin ve bilinçaltınızın mesajlarını çözümleyin.</p>
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-cloud"></i>
+                        <span>Detaylı Yorumlar</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-book"></i>
+                        <span>Rüya Sözlüğü</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-feather"></i>
+                        <span>Kişisel Analizler</span>
+                    </div>
+                </div>
+                <a href="src/pages/dream.html" class="split-button">
+                    Rüyaları Yorumla
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="background-overlay"></div>
+            <div class="floating-elements">
+                <i class="fas fa-cloud"></i>
+                <i class="fas fa-book"></i>
+                <i class="fas fa-feather"></i>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="src/js/main.js"></script>
+</body>
+</html> 
