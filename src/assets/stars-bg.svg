@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <radialGradient id="starGlow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+            <stop offset="0%" style="stop-color:rgba(255,215,0,0.3)"/>
+            <stop offset="100%" style="stop-color:rgba(255,215,0,0)"/>
+        </radialGradient>
+    </defs>
+    
+    <!-- Small Stars -->
+    <g fill="#FFD700" opacity="0.3">
+        <circle cx="50" cy="50" r="1"/>
+        <circle cx="120" cy="30" r="1.2"/>
+        <circle cx="200" cy="80" r="1"/>
+        <circle cx="280" cy="40" r="1.5"/>
+        <circle cx="350" cy="90" r="1"/>
+        <circle cx="70" cy="150" r="1.2"/>
+        <circle cx="150" cy="120" r="1"/>
+        <circle cx="250" cy="160" r="1"/>
+        <circle cx="330" cy="180" r="1.5"/>
+        <circle cx="40" cy="220" r="1"/>
+        <circle cx="100" cy="250" r="1.2"/>
+        <circle cx="180" cy="210" r="1"/>
+        <circle cx="270" cy="270" r="1"/>
+        <circle cx="340" cy="240" r="1.5"/>
+        <circle cx="60" cy="310" r="1"/>
+        <circle cx="140" cy="340" r="1.2"/>
+        <circle cx="220" cy="300" r="1"/>
+        <circle cx="290" cy="350" r="1"/>
+        <circle cx="360" cy="320" r="1.5"/>
+    </g>
+    
+    <!-- Medium Stars with Glow -->
+    <g>
+        <circle cx="80" cy="100" r="2" fill="#FFD700" opacity="0.4"/>
+        <circle cx="80" cy="100" r="4" fill="url(#starGlow)" opacity="0.2"/>
+        
+        <circle cx="300" cy="150" r="2" fill="#FFD700" opacity="0.4"/>
+        <circle cx="300" cy="150" r="4" fill="url(#starGlow)" opacity="0.2"/>
+        
+        <circle cx="150" cy="250" r="2" fill="#FFD700" opacity="0.4"/>
+        <circle cx="150" cy="250" r="4" fill="url(#starGlow)" opacity="0.2"/>
+        
+        <circle cx="250" cy="350" r="2" fill="#FFD700" opacity="0.4"/>
+        <circle cx="250" cy="350" r="4" fill="url(#starGlow)" opacity="0.2"/>
+    </g>
+    
+    <!-- Large Stars with Strong Glow -->
+    <g>
+        <circle cx="200" cy="200" r="3" fill="#FFD700" opacity="0.5"/>
+        <circle cx="200" cy="200" r="6" fill="url(#starGlow)" opacity="0.3"/>
+        
+        <circle cx="350" cy="50" r="3" fill="#FFD700" opacity="0.5"/>
+        <circle cx="350" cy="50" r="6" fill="url(#starGlow)" opacity="0.3"/>
+        
+        <circle cx="50" cy="350" r="3" fill="#FFD700" opacity="0.5"/>
+        <circle cx="50" cy="350" r="6" fill="url(#starGlow)" opacity="0.3"/>
+    </g>
+</svg> 

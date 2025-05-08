@@ -3,77 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Burç Yorumu - Rüya & Burç Atlası</title>
+    <meta name="description" content="Rüya Atlası - Günlük Burç Yorumları ve Burç Uyumları">
+    <title>Günlük Burç Yorumları - Rüya Atlası</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon/favicon.svg">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="../assets/favicon/site.webmanifest">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Styles -->
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/horoscope.css">
-    <script src="../scripts/main.js" defer></script>
-    <script src="../scripts/horoscope.js" defer></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 </head>
-<body>
-    <nav class="main-nav">
-        <a href="./index.html" class="nav-logo">Rüya & Burç Atlası</a>
-        <div class="auth-buttons">
-            <button class="auth-btn login-btn">Giriş Yap</button>
-            <button class="auth-btn register-btn">Üye Ol</button>
-        </div>
-    </nav>
+<body class="horoscope-page">
+    <!-- Header -->
+    <header class="site-header">
+        <a href="../../index.html" class="header-logo">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+            <span>Rüya Atlası</span>
+        </a>
+        
+        <!-- Auth Buttons (for guests) -->
+        <nav class="auth-buttons" id="guestNav">
+            <a href="login.html" class="btn btn-login">
+                <i class="fas fa-user" aria-hidden="true"></i>
+                <span>Giriş Yap</span>
+            </a>
+            <a href="signup.html" class="btn btn-signup">
+                <i class="fas fa-user-plus" aria-hidden="true"></i>
+                <span>Üye Ol</span>
+            </a>
+        </nav>
 
-    <div class="horoscope-container">
-        <div class="user-horoscope">
-            <div class="horoscope-header">
-                <h1>Günlük Burç Yorumunuz</h1>
-                <p class="current-date"></p>
-            </div>
-            <div class="horoscope-content">
-                <div class="sign-info">
-                    <img src="" alt="" class="sign-icon" id="userSignIcon">
-                    <h2 class="sign-name" id="userSignName">Burç</h2>
+        <!-- User Profile Panel (for logged in users) -->
+        <div class="user-panel" id="userPanel" style="display: none;">
+            <button class="user-menu-button" id="userMenuButton" aria-haspopup="true" aria-expanded="false">
+                <div class="user-avatar">
+                    <i class="fas fa-user-circle" aria-hidden="true"></i>
                 </div>
-                <div class="horoscope-text" id="dailyHoroscope">
-                    <!-- Burç yorumu buraya gelecek -->
-                    <p class="login-message">Günlük burç yorumunuzu görmek için lütfen giriş yapın.</p>
-                </div>
+                <span class="user-name">Kullanıcı</span>
+                <i class="fas fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="user-dropdown" id="userDropdown" aria-labelledby="userMenuButton">
+                <a href="profile.html" class="dropdown-item">
+                    <i class="fas fa-user" aria-hidden="true"></i>
+                    <span>Profilim</span>
+                </a>
+                <a href="my-dreams.html" class="dropdown-item">
+                    <i class="fas fa-book" aria-hidden="true"></i>
+                    <span>Rüyalarım</span>
+                </a>
+                <a href="favorites.html" class="dropdown-item">
+                    <i class="fas fa-star" aria-hidden="true"></i>
+                    <span>Favorilerim</span>
+                </a>
+                <a href="settings.html" class="dropdown-item">
+                    <i class="fas fa-cog" aria-hidden="true"></i>
+                    <span>Ayarlar</span>
+                </a>
+                <button class="dropdown-item logout-button" id="logoutButton">
+                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                    <span>Çıkış Yap</span>
+                </button>
             </div>
         </div>
+    </header>
 
-        <div class="all-signs">
-            <h2>Tüm Burçlar</h2>
-            <div class="signs-grid">
-                <!-- Burç kartları dinamik olarak eklenecek -->
-            </div>
+    <!-- Main Content -->
+    <main class="horoscope-main">
+        <div class="horoscope-container">
+            <h1>Günlük Burç Yorumları</h1>
+            <p class="current-date" aria-label="Bugünün tarihi"></p>
+
+            <!-- User's Horoscope Section -->
+            <section class="user-horoscope-section">
+                <h2 class="section-title">Burcunuzun Yorumu</h2>
+                <div class="horoscope-tabs">
+                    <button class="tab-button active" data-period="daily">Günlük</button>
+                    <button class="tab-button" data-period="weekly">Haftalık</button>
+                    <button class="tab-button" data-period="monthly">Aylık</button>
+                    <button class="tab-button" data-period="yearly">Yıllık</button>
+                </div>
+                <div class="user-horoscope-content">
+                    <!-- User's horoscope content will be dynamically added here -->
+                </div>
+            </section>
+
+            <!-- Other Horoscopes Section -->
+            <section class="other-horoscopes-section">
+                <h2 class="section-title">Diğer Burçların Günlük Yorumları</h2>
+                <div class="horoscope-grid">
+                    <!-- Other horoscope cards will be dynamically added here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Loading Indicator -->
+    <div class="loading-overlay" style="display: none;">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <span>Yükleniyor...</span>
         </div>
     </div>
 
-    <!-- Login/Register Modals (Aynı index.html'deki gibi) -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Giriş Yap</h2>
-            <form class="auth-form" id="loginForm">
-                <input type="email" placeholder="E-posta" required>
-                <input type="password" placeholder="Şifre" required>
-                <button type="submit" class="submit-btn">Giriş Yap</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="modal" id="registerModal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Üye Ol</h2>
-            <form class="auth-form" id="registerForm">
-                <input type="text" placeholder="Ad Soyad" required>
-                <input type="email" placeholder="E-posta" required>
-                <div class="birth-date-container">
-                    <label for="birthDate">Doğum Tarihiniz:</label>
-                    <input type="date" id="birthDate" required>
-                </div>
-                <input type="password" placeholder="Şifre" required>
-                <input type="password" placeholder="Şifre Tekrar" required>
-                <button type="submit" class="submit-btn">Üye Ol</button>
-            </form>
-        </div>
-    </div>
+    <!-- Scripts -->
+    <script type="module" src="../js/firebase-config.js"></script>
+    <script type="module" src="../js/userService.js"></script>
+    <script type="module" src="../js/horoscopeService.js"></script>
+    <script type="module" src="../js/horoscope.js"></script>
 </body>
 </html> 

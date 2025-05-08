@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rüya Atlası - Burç Detaylı Yorum">
+    <title>Burç Detaylı Yorum - Rüya Atlası</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/horoscope.css">
+    <link rel="stylesheet" href="../styles/horoscope-detail.css">
+</head>
+<body class="horoscope-detail-page">
+    <!-- Header -->
+    <header class="site-header">
+        <a href="horoscope.html" class="header-logo">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+            <span>Rüya Atlası</span>
+        </a>
+        
+        <!-- Back Button -->
+        <a href="horoscope.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            <span>Burçlara Dön</span>
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="horoscope-detail-main">
+        <div class="horoscope-detail-container">
+            <div class="horoscope-header">
+                <div class="zodiac-icon-large">
+                    <!-- Icon will be dynamically added -->
+                </div>
+                <h1 class="zodiac-title">
+                    <!-- Title will be dynamically added -->
+                </h1>
+                <p class="date-range">
+                    <!-- Date range will be dynamically added -->
+                </p>
+            </div>
+
+            <div class="horoscope-content">
+                <section class="daily-forecast">
+                    <h2>Günlük Burç Yorumu</h2>
+                    <p class="forecast-text">
+                        <!-- Daily forecast will be dynamically added -->
+                    </p>
+                </section>
+
+                <section class="compatibility">
+                    <h2>Burç Uyumu</h2>
+                    <div class="compatibility-grid">
+                        <!-- Compatibility info will be dynamically added -->
+                    </div>
+                </section>
+
+                <section class="characteristics">
+                    <h2>Burç Özellikleri</h2>
+                    <div class="characteristics-grid">
+                        <!-- Characteristics will be dynamically added -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script type="module" src="../js/firebase-config.js"></script>
+    <script type="module" src="../js/userService.js"></script>
+    <script type="module" src="../js/horoscope-detail.js"></script>
+</body>
+</html> 

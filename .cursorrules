@@ -1,0 +1,89 @@
+1. Renk Paleti
+
+Ana renkler olarak koyu mavi, mor ve gece mavisi tonları tercih edilmeli
+Altın/sarı aksan rengi olarak kullanılmalı
+Beyaz veya krem rengi metin için tercih edilmeli
+Maksimum 5 renk kullanılmalı, tutarlılık korunmalı
+Yıldız burçları için her burca özel renk kodları belirlenebilir
+
+2. Tipografi
+
+Başlıklar için serif font (örn. Playfair Display, Georgia)
+Metin için sans-serif font (örn. Open Sans, Roboto)
+Font büyüklükleri hiyerarşisi: H1(32px), H2(26px), H3(22px), normal metin(16px)
+Burç sembolleri için özel bir icon font kullanılmalı
+Mobil görünümde font boyutları %15 küçültülmeli
+
+3. Görseller ve İkonlar
+
+Mistik ve kozmik temalar içeren görseller kullanılmalı
+Burç sembolleri vektörel formatta hazırlanmalı
+Rüya kategorileri için açıklayıcı illüstrasyonlar kullanılmalı
+Görseller optimum boyutta olmalı (sayfa yüklenmesini yavaşlatmamalı)
+Karanlık arka planlarda görünürlük için görsellere hafif glow efekti eklenebilir
+
+4. Sayfa Düzeni
+
+Ana sayfa: Kaydırmalı tasarım, bölümler arası geçişler animasyonlu olmalı
+Burç sayfaları: Her burç için ayrı sayfa, grid düzeninde gösterilmeli
+Rüya yorumları: Kategorilere göre filtrelenebilir liste görünümü
+İçerikler 1200px genişliğini aşmamalı
+Mobil görünümde tek sütun düzeni kullanılmalı
+
+5. Kullanıcı Deneyimi
+
+Formlar basit ve kullanıcı dostu olmalı, minimum alan kullanılmalı
+Burç seçimleri için görsel seçiciler kullanılmalı
+Rüya arama özelliği belirgin olmalı
+Sayfalar arası gezinme maksimum 3 tıklama ile sağlanmalı
+Kullanıcı geri bildirimleri için hızlı pop-up mesajlar kullanılmalı
+
+6. Responsive Tasarım
+
+Minimum desteklenen ekran genişliği: 320px
+768px altında tek sütun düzeni
+768px-1024px arası iki sütun düzeni
+Cihaz yöneliminin (yatay/dikey) düzene etkisi göz önünde bulundurulmalı
+Touch screen kullanıcıları için buton boyutları minimum 44px × 44px olmalı
+
+7. Performans
+
+Tüm görseller WebP formatında olmalı, alternatif JPG/PNG sağlanmalı
+Sayfalar ilk yüklenme sırasında bir yükleme animasyonu göstermeli
+Lazy loading tekniği kullanılmalı
+Google PageSpeed Insights skoru minimum 85 olmalı
+CSS ve JavaScript dosyaları minify edilmeli
+
+8. Erişilebilirlik
+
+Renk kontrastı WCAG 2.1 AA standartlarına uygun olmalı (minimum 4.5:1)
+Tüm görsellere alt metin eklenebilmeli
+Form elemanları düzgün etiketlenmeli
+Klavye ile navigasyon desteklenmeli
+Ekran okuyuculara uyumlu HTML yapısı kullanılmalı
+
+9. Özel Efektler
+
+Yıldız ve gezegen hareketlerini simüle eden arka plan animasyonları
+Burç seçiminde hover durumunda parıltı efekti
+Rüya yorumu sonuçları için fade-in animasyonu
+Sayfa geçişlerinde yumuşak animasyonlar
+Scroll olaylarında parallax efektleri kullanılabilir
+
+10. İçerik Stratejisi
+
+Her sayfa için maksimum kelime sayısı: 500
+Rüya yorumları kısa ve öz olmalı
+Burç yorumları kategorilere ayrılmalı (aşk, kariyer, sağlık)
+Korkutucu veya olumsuz içerikler yumuşatılmalı
+Kullanıcı tarafından oluşturulan içerikler moderasyondan geçmeli
+
+11. SEO Optimizasyonu
+
+Her sayfa için benzersiz title ve meta description
+Burç ve rüya anahtar kelimeleri URL yapısında kullanılmalı
+İç link yapısı optimize edilmeli
+Schema.org yapısal veri işaretlemeleri kullanılmalı
+Hızlı yüklenen sayfalar için statik içerik öncelikli olmalı
+
+en son işlemlerin bittikten sonra bitti yaz

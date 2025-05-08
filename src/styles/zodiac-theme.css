@@ -1,0 +1,119 @@
+/* Zodiac Sign Colors */
+:root {
+  /* Fire Signs */
+  --aries-color: #FF4136;
+  --leo-color: #FFB700;
+  --sagittarius-color: #FF6B6B;
+  
+  /* Earth Signs */
+  --taurus-color: #2ECC40;
+  --virgo-color: #98FB98;
+  --capricorn-color: #3D9970;
+  
+  /* Air Signs */
+  --gemini-color: #FFD700;
+  --libra-color: #B10DC9;
+  --aquarius-color: #7FDBFF;
+  
+  /* Water Signs */
+  --cancer-color: #DDDDDD;
+  --scorpio-color: #85144b;
+  --pisces-color: #39CCCC;
+}
+
+/* Zodiac Card Styles */
+.zodiac-card {
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  transition: transform var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.zodiac-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(255,255,255,0.1),
+    rgba(255,255,255,0.05)
+  );
+  z-index: 1;
+}
+
+.zodiac-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Zodiac Icon Styles */
+.zodiac-icon {
+  width: var(--min-touch-target);
+  height: var(--min-touch-target);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--spacing-sm);
+}
+
+/* Zodiac Grid Layout */
+.zodiac-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+}
+
+@media (--mobile) {
+  .zodiac-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+  }
+}
+
+/* Zodiac Element Indicators */
+.element-fire { background-color: rgba(255, 69, 0, 0.1); }
+.element-earth { background-color: rgba(46, 204, 64, 0.1); }
+.element-air { background-color: rgba(127, 219, 255, 0.1); }
+.element-water { background-color: rgba(57, 204, 204, 0.1); }
+
+/* Zodiac Card Animations */
+@keyframes zodiacFloat {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+.zodiac-animate {
+  animation: zodiacFloat 4s ease-in-out infinite;
+}
+
+/* Zodiac Symbol Glow Effects */
+.zodiac-symbol {
+  position: relative;
+  display: inline-block;
+}
+
+.zodiac-symbol::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    var(--color-accent) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.zodiac-symbol:hover::after {
+  opacity: 0.3;
+} 

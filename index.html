@@ -32,28 +32,18 @@
     </script>
 </head>
 <body>
-    <!-- Skip Link -->
-    <a href="#main-content" class="skip-link">Ana içeriğe git</a>
-
-    <!-- Loading Screen -->
-    <div class="loading" id="loadingScreen">
-        <div class="loading-content">
-            <div class="loading-icon">
-                <i class="fas fa-moon"></i>
-                <i class="fas fa-star"></i>
-            </div>
-            <span>Rüya Atlası</span>
-        </div>
-    </div>
-
     <!-- Auth Buttons -->
     <div class="auth-container">
         <div class="auth-buttons">
-            <a href="src/pages/login.html" class="btn btn-login">
+            <a href="src/pages/profile.html" class="btn btn-profile" id="profileButton" style="display: none;">
+                <i class="fas fa-user-circle"></i>
+                Profilim
+            </a>
+            <a href="src/pages/login.html" class="btn btn-login" id="loginButton">
                 <i class="fas fa-user"></i>
                 Giriş Yap
             </a>
-            <a href="src/pages/signup.html" class="btn btn-signup">
+            <a href="src/pages/signup.html" class="btn btn-signup" id="signupButton">
                 <i class="fas fa-user-plus"></i>
                 Üye Ol
             </a>
@@ -127,7 +117,14 @@
         </section>
     </main>
 
-    <!-- Scripts -->
-    <script src="src/js/main.js"></script>
+    <!-- Firebase Scripts -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
+    
+    <!-- App Scripts -->
+    <script type="module" src="src/js/firebase-config.js"></script>
+    <script type="module" src="src/js/userService.js"></script>
+    <script type="module" src="src/js/authUI.js"></script>
 </body>
 </html> 

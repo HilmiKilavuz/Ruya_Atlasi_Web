@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rüya Atlası - Rüya Yorumlama">
+    <title>Rüya Yorumlama - Rüya Atlası</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/dream.css">
+</head>
+<body class="dream-page">
+    <!-- Header -->
+    <header class="site-header">
+        <nav class="container">
+            <a href="../../index.html" class="logo">
+                <i class="fas fa-moon"></i>
+                Rüya Atlası
+            </a>
+            <div class="nav-links">
+                <a href="dream.html" class="active">Rüya Yorumları</a>
+                <a href="horoscope.html">Burç Yorumları</a>
+                <a href="profile.html">Profilim</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dream-main container">
+        <!-- Hero Section -->
+        <section class="dream-hero">
+            <h1>Rüya Yorumlama</h1>
+            <p class="hero-description">Rüyalarınızın gizli anlamlarını keşfedin ve bilinçaltınızın mesajlarını çözümleyin.</p>
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="dreamSearch" placeholder="Rüyanızda gördüğünüz sembolleri arayın..." 
+                           class="search-input">
+                </div>
+                <button class="search-button">
+                    <i class="fas fa-arrow-right"></i>
+                    Yorumla
+                </button>
+            </div>
+
+            <!-- Popular Categories -->
+            <div class="dream-categories">
+                <h2>Popüler Kategoriler</h2>
+                <div class="category-grid">
+                    <a href="#" class="category-card">
+                        <i class="fas fa-water"></i>
+                        <span>Su ve Deniz</span>
+                    </a>
+                    <a href="#" class="category-card">
+                        <i class="fas fa-tree"></i>
+                        <span>Doğa</span>
+                    </a>
+                    <a href="#" class="category-card">
+                        <i class="fas fa-home"></i>
+                        <span>Ev</span>
+                    </a>
+                    <a href="#" class="category-card">
+                        <i class="fas fa-users"></i>
+                        <span>İnsan</span>
+                    </a>
+                    <a href="#" class="category-card">
+                        <i class="fas fa-paw"></i>
+                        <span>Hayvanlar</span>
+                    </a>
+                    <a href="#" class="category-card">
+                        <i class="fas fa-cloud-sun"></i>
+                        <span>Hava</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Interpretations -->
+        <section class="recent-interpretations">
+            <div class="section-header">
+                <h2>Son Yorumlar</h2>
+                <a href="#" class="view-all">Tümünü Gör <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="interpretations-grid">
+                <article class="interpretation-card">
+                    <div class="card-header">
+                        <i class="fas fa-feather"></i>
+                        <h3>Uçmak</h3>
+                    </div>
+                    <p class="interpretation-text">Rüyada uçmak, özgürlük arzusunu ve hedeflerinize ulaşma isteğinizi temsil eder.</p>
+                    <div class="card-footer">
+                        <span class="category">Hareket</span>
+                        <button class="save-button" aria-label="Yorumu kaydet">
+                            <i class="far fa-bookmark"></i>
+                        </button>
+                    </div>
+                </article>
+                <article class="interpretation-card">
+                    <div class="card-header">
+                        <i class="fas fa-water"></i>
+                        <h3>Deniz</h3>
+                    </div>
+                    <p class="interpretation-text">Rüyada deniz görmek, duygusal durumunuzu ve bilinçaltınızdaki dalgalanmaları yansıtır.</p>
+                    <div class="card-footer">
+                        <span class="category">Su</span>
+                        <button class="save-button" aria-label="Yorumu kaydet">
+                            <i class="far fa-bookmark"></i>
+                        </button>
+                    </div>
+                </article>
+                <article class="interpretation-card">
+                    <div class="card-header">
+                        <i class="fas fa-door-open"></i>
+                        <h3>Kapı</h3>
+                    </div>
+                    <p class="interpretation-text">Rüyada kapı görmek, yeni fırsatları ve hayatınızdaki geçişleri sembolize eder.</p>
+                    <div class="card-footer">
+                        <span class="category">Ev</span>
+                        <button class="save-button" aria-label="Yorumu kaydet">
+                            <i class="far fa-bookmark"></i>
+                        </button>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Dream Dictionary -->
+        <section class="dream-dictionary">
+            <div class="section-header">
+                <h2>Rüya Sözlüğü</h2>
+                <div class="dictionary-filter">
+                    <button class="filter-button active">Hepsi</button>
+                    <button class="filter-button">A-E</button>
+                    <button class="filter-button">F-J</button>
+                    <button class="filter-button">K-O</button>
+                    <button class="filter-button">P-T</button>
+                    <button class="filter-button">U-Z</button>
+                </div>
+            </div>
+            <div class="dictionary-grid">
+                <!-- Dictionary items will be loaded dynamically -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Action Button -->
+    <button class="fab-button" aria-label="Rüya yorumu ekle">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="../js/dream-interpretation.js"></script>
+</body>
+</html> 

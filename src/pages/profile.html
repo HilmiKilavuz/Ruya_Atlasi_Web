@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profilim - Rüya Atlası</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles/profile.css">
+</head>
+<body>
+    <!-- Ana Menü -->
+    <nav class="main-nav">
+        <a href="../../index.html" class="nav-logo">
+            <i class="fas fa-moon"></i>
+            Rüya Atlası
+        </a>
+        <button class="back-button" onclick="window.location.href='../../index.html'">
+            <i class="fas fa-arrow-left"></i>
+            Ana Sayfaya Dön
+        </button>
+    </nav>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-cover">
+                <div class="profile-info">
+                    <h1 class="profile-name" id="displayName">Yükleniyor...</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-content">
+            <div class="profile-section personal-info">
+                <div class="section-header">
+                    <h2>Kişisel Bilgiler</h2>
+                    <button class="edit-toggle" id="editToggle">
+                        <i class="fas fa-edit"></i>
+                        Düzenle
+                    </button>
+                </div>
+                <form id="profileForm" class="profile-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fullName">Ad Soyad</label>
+                            <input type="text" id="fullName" name="fullName" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Kullanıcı Adı</label>
+                            <input type="text" id="username" name="username" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">E-posta</label>
+                            <input type="email" id="email" name="email" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telefon</label>
+                            <input type="tel" id="phone" name="phone" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="birthDate">Doğum Tarihi</label>
+                            <input type="date" id="birthDate" name="birthDate" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="zodiacSign">Burç</label>
+                            <select id="zodiacSign" name="zodiacSign" disabled>
+                                <option value="">Seçiniz</option>
+                                <option value="koç">Koç</option>
+                                <option value="boğa">Boğa</option>
+                                <option value="ikizler">İkizler</option>
+                                <option value="yengeç">Yengeç</option>
+                                <option value="aslan">Aslan</option>
+                                <option value="başak">Başak</option>
+                                <option value="terazi">Terazi</option>
+                                <option value="akrep">Akrep</option>
+                                <option value="yay">Yay</option>
+                                <option value="oğlak">Oğlak</option>
+                                <option value="kova">Kova</option>
+                                <option value="balık">Balık</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bio">Hakkımda</label>
+                        <textarea id="bio" name="bio" rows="3" disabled></textarea>
+                    </div>
+
+                    <div class="form-actions" style="display: none;">
+                        <button type="submit" class="save-button">
+                            <i class="fas fa-save"></i>
+                            Kaydet
+                        </button>
+                        <button type="button" class="cancel-button" id="cancelEdit">
+                            <i class="fas fa-times"></i>
+                            İptal
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="profile-sidebar">
+                <div class="profile-section">
+                    <h2>İstatistikler</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <i class="fas fa-book-open"></i>
+                            <span class="stat-number" id="dreamCount">0</span>
+                            <span class="stat-label">Kaydedilen Rüya</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-comment"></i>
+                            <span class="stat-number" id="commentCount">0</span>
+                            <span class="stat-label">Yorum</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-star"></i>
+                            <span class="stat-number" id="favoriteCount">0</span>
+                            <span class="stat-label">Favori</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h2>Hesap Ayarları</h2>
+                    <div class="settings-list">
+                        <a href="#" class="settings-item">
+                            <i class="fas fa-lock"></i>
+                            Şifre Değiştir
+                        </a>
+                        <a href="#" class="settings-item">
+                            <i class="fas fa-bell"></i>
+                            Bildirim Ayarları
+                        </a>
+                        <a href="#" class="settings-item">
+                            <i class="fas fa-shield-alt"></i>
+                            Gizlilik Ayarları
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Şifre Değiştirme Modal -->
+    <div id="passwordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Şifre Değiştir</h2>
+                <button class="close-button">&times;</button>
+            </div>
+            <form id="passwordForm" class="password-form">
+                <div class="form-group">
+                    <label for="currentPassword">Mevcut Şifre</label>
+                    <div class="password-input-group">
+                        <input type="password" id="currentPassword" required>
+                        <button type="button" class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Yeni Şifre</label>
+                    <div class="password-input-group">
+                        <input type="password" id="newPassword" required>
+                        <button type="button" class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength">
+                        <div class="strength-bar"></div>
+                        <span class="strength-text"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Yeni Şifre (Tekrar)</label>
+                    <div class="password-input-group">
+                        <input type="password" id="confirmPassword" required>
+                        <button type="button" class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="save-button">
+                        <i class="fas fa-save"></i>
+                        Şifreyi Değiştir
+                    </button>
+                    <button type="button" class="cancel-button" onclick="closePasswordModal()">
+                        <i class="fas fa-times"></i>
+                        İptal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
+    <script type="module" src="../scripts/profile.js"></script>
+</body>
+</html> 

@@ -1,0 +1,151 @@
+/* Dream Category Colors */
+:root {
+  --dream-spiritual: #9C27B0;
+  --dream-prophetic: #673AB7;
+  --dream-nightmare: #D32F2F;
+  --dream-lucid: #00BCD4;
+  --dream-recurring: #4CAF50;
+  --dream-emotional: #FF9800;
+}
+
+/* Dream Card Styles */
+.dream-card {
+  background: linear-gradient(135deg,
+    rgba(26, 35, 126, 0.9),
+    rgba(74, 20, 140, 0.9)
+  );
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.dream-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 215, 0, 0.1) 0%,
+    transparent 60%
+  );
+  animation: dreamGlow 10s ease-in-out infinite;
+}
+
+/* Dream Category Badges */
+.dream-category {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-right: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+.dream-category-spiritual { background-color: var(--dream-spiritual); }
+.dream-category-prophetic { background-color: var(--dream-prophetic); }
+.dream-category-nightmare { background-color: var(--dream-nightmare); }
+.dream-category-lucid { background-color: var(--dream-lucid); }
+.dream-category-recurring { background-color: var(--dream-recurring); }
+.dream-category-emotional { background-color: var(--dream-emotional); }
+
+/* Dream Search Input */
+.dream-search {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-md);
+  color: var(--color-text);
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto var(--spacing-xl);
+  transition: all var(--transition-normal);
+}
+
+.dream-search:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+  outline: none;
+}
+
+/* Dream Grid Layout */
+.dream-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+}
+
+@media (--mobile) {
+  .dream-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+  }
+}
+
+/* Dream Animations */
+@keyframes dreamGlow {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(25%, 25%) rotate(180deg);
+    opacity: 0.8;
+  }
+}
+
+@keyframes dreamFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.dream-float {
+  animation: dreamFloat 6s ease-in-out infinite;
+}
+
+/* Dream Symbol Icons */
+.dream-symbol {
+  width: 24px;
+  height: 24px;
+  margin-right: var(--spacing-xs);
+  opacity: 0.8;
+  transition: opacity var(--transition-normal);
+}
+
+.dream-symbol:hover {
+  opacity: 1;
+}
+
+/* Dream Interpretation Section */
+.dream-interpretation {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+  position: relative;
+}
+
+.dream-interpretation::before {
+  content: '"';
+  font-family: var(--font-heading);
+  font-size: 4rem;
+  position: absolute;
+  top: -1rem;
+  left: var(--spacing-sm);
+  color: var(--color-accent);
+  opacity: 0.3;
+} 

@@ -1,27 +1,18 @@
 // DOM Elements
-const loadingScreen = document.getElementById('loadingScreen');
 const dreamSearchInput = document.getElementById('dreamSearchInput');
 const horoscopeSearchInput = document.getElementById('horoscopeSearchInput');
 const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
 const nav = document.querySelector('nav');
 
-// Loading Screen
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        loadingScreen.style.opacity = '0';
-        setTimeout(() => {
-            loadingScreen.style.display = 'none';
-        }, 500);
-    }, 1000);
-});
-
 // Mobile Menu Toggle
-mobileMenuBtn.addEventListener('click', () => {
-    nav.classList.toggle('active');
-    mobileMenuBtn.setAttribute('aria-expanded', 
-        mobileMenuBtn.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'
-    );
-});
+if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', () => {
+        nav.classList.toggle('active');
+        mobileMenuBtn.setAttribute('aria-expanded', 
+            mobileMenuBtn.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'
+        );
+    });
+}
 
 // Sample Dream Data
 const dreams = [
@@ -42,6 +33,8 @@ const horoscopes = [
 
 // Search Functionality
 function handleSearch(searchInput, data, type) {
+    if (!searchInput) return;
+    
     const searchTerm = searchInput.value.trim().toLowerCase();
     if (searchTerm.length < 2) {
         showNotification('Lütfen en az 2 karakter girin', 'info');
@@ -69,23 +62,29 @@ function handleSearch(searchInput, data, type) {
 }
 
 // Event Listeners for Search
-dreamSearchInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        handleSearch(dreamSearchInput, dreams, 'dream');
-    }
-});
+if (dreamSearchInput) {
+    dreamSearchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleSearch(dreamSearchInput, dreams, 'dream');
+        }
+    });
+}
 
-horoscopeSearchInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        handleSearch(horoscopeSearchInput, horoscopes, 'horoscope');
-    }
-});
+if (horoscopeSearchInput) {
+    horoscopeSearchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleSearch(horoscopeSearchInput, horoscopes, 'horoscope');
+        }
+    });
+}
 
 // Show Results
 function showResults(results, type) {
     const container = type === 'dream' ? 
         document.querySelector('#dream-section .interpretations') :
         document.querySelector('#horoscope-section .interpretations');
+
+    if (!container) return;
 
     container.innerHTML = results.map(item => `
         <div class="interpretation-card fade-in">

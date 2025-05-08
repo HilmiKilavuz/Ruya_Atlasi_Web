@@ -1,0 +1,17 @@
+{
+  "name": "ruya-atlasi",
+  "version": "1.0.0",
+  "description": "Rüya Atlası Web Uygulaması",
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "firebase": "^10.8.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
