@@ -1,5 +1,5 @@
 import { getCurrentUser, logout } from './userService.js';
-import { horoscopeService, convertSignToTurkish } from './horoscopeService.js';
+import { horoscopeService, convertSignToTurkish, convertSignToApiFormat } from './horoscopeService.js';
 import { userService } from './userService.js';
 
 // Constants
@@ -63,19 +63,56 @@ const checkAuthState = async () => {
             showUserPanel(user);
             
             // Burç bilgisini al, öncelikle Firebase'den
-            if (user.horoscopeSign) {
-                horoscopeSign = user.horoscopeSign;
-                // Eğer Firebase'de varsa localStorage'a da kaydet
-                localStorage.setItem('userHoroscopeSign', horoscopeSign);
-            } 
-            // Firebase'de yoksa localStorage'dan kontrol et
-            else {
-                horoscopeSign = localStorage.getItem('userHoroscopeSign');
+            console.log('Kullanıcı profili:', user); // Debug için
+            
+            // Burç bilgisini Firestore'dan almak için doğrudan kullanıcı profilini Firebase'den çek
+            try {
+                // getUserProfile fonksiyonu iki farklı formatta dönüş yapabilir
+                // 1. Direk veri nesnesi
+                // 2. { success: true, data: {...} } formatında
+                // Her iki durumu da kontrol etmeliyiz
+                const userProfileResult = await userService.getUserProfile(user.uid);
+                console.log('Firestore profil sonucu:', userProfileResult);
                 
-                // Eğer localStorage'da varsa ve kullanıcı giriş yapmışsa, Firebase'e de kaydet
-                if (horoscopeSign && user.uid) {
-                    await userService.updateHoroscopeSign(user.uid, horoscopeSign);
+                let userProfile = null;
+                if (userProfileResult && userProfileResult.success && userProfileResult.data) {
+                    // Format: { success: true, data: {...} }
+                    userProfile = userProfileResult.data;
+                } else if (userProfileResult && typeof userProfileResult === 'object') {
+                    // Format: Direk veri nesnesi
+                    userProfile = userProfileResult;
                 }
+                
+                console.log('İşlenmiş profil verisi:', userProfile);
+                
+                // ÖNEMLİ DEĞİŞİKLİK: Her zaman zodiacSign'i öncelikle kullan (eğer varsa)
+                if (userProfile && userProfile.zodiacSign) {
+                    const convertedSign = convertSignToApiFormat(userProfile.zodiacSign);
+                    await userService.updateHoroscopeSign(user.uid, convertedSign);
+                    horoscopeSign = convertedSign;
+                    console.log('zodiacSign değeri kullanılıyor:', horoscopeSign, 'Orijinal değer:', userProfile.zodiacSign);
+                }
+                // zodiacSign yoksa horoscopeSign'i kontrol et
+                else if (userProfile && userProfile.horoscopeSign) {
+                    horoscopeSign = userProfile.horoscopeSign;
+                    console.log('Firestore burcu bulundu:', horoscopeSign);
+                    // Eğer Firebase'de varsa localStorage'a da kaydet
+                    localStorage.setItem('userHoroscopeSign', horoscopeSign);
+                } else {
+                    // Firebase'de yoksa localStorage'dan kontrol et
+                    horoscopeSign = localStorage.getItem('userHoroscopeSign');
+                    console.log('localStorage burcu:', horoscopeSign);
+                    
+                    // Eğer localStorage'da varsa ve kullanıcı giriş yapmışsa, Firebase'e de kaydet
+                    if (horoscopeSign && user.uid) {
+                        await userService.updateHoroscopeSign(user.uid, horoscopeSign);
+                    }
+                }
+            } catch (profileError) {
+                console.error('Profil bilgileri alınırken hata:', profileError);
+                // Hata olursa localStorage'dan kontrol et
+                horoscopeSign = localStorage.getItem('userHoroscopeSign');
+                console.log('Hata sonrası localStorage burcu:', horoscopeSign);
             }
             
             if (horoscopeSign) {
@@ -127,26 +164,78 @@ const showGuestNav = () => {
 const loadUserHoroscope = async (sign, period = 'daily') => {
     try {
         showLoading();
+        console.log('loadUserHoroscope çağrıldı, burç:', sign, 'periyot:', period);
+        
+        // Burç ismi Türkçe olabilir veya farklı formatta olabilir, API formatına çevirelim
+        const normalizedSign = convertSignToApiFormat(sign);
+        console.log('Normalize edilmiş burç:', normalizedSign, 'Orijinal değer:', sign);
+        
         let horoscopeData;
 
         switch (period) {
             case 'daily':
-                horoscopeData = await horoscopeService.getDailyHoroscope(sign);
+                horoscopeData = await horoscopeService.getDailyHoroscope(normalizedSign);
                 break;
             case 'weekly':
-                horoscopeData = await horoscopeService.getWeeklyHoroscope(sign);
+                horoscopeData = await horoscopeService.getWeeklyHoroscope(normalizedSign);
                 break;
             case 'monthly':
-                horoscopeData = await horoscopeService.getMonthlyHoroscope(sign);
+                horoscopeData = await horoscopeService.getMonthlyHoroscope(normalizedSign);
                 break;
             case 'yearly':
-                horoscopeData = await horoscopeService.getYearlyHoroscope(sign);
+                horoscopeData = await horoscopeService.getYearlyHoroscope(normalizedSign);
                 break;
             default:
-                horoscopeData = await horoscopeService.getDailyHoroscope(sign);
+                horoscopeData = await horoscopeService.getDailyHoroscope(normalizedSign);
         }
-
-        updateUserHoroscopeContent(sign, horoscopeData, period);
+        
+        console.log('Yüklenen burç yorumu:', horoscopeData);
+        console.log('Gösterilecek burç adı:', horoscopeData.burc);
+        
+        // Doğrudan içeriği güncelle
+        if (userHoroscopeContent) {
+            const zodiacColor = horoscopeData.color || `var(--${normalizedSign}-color)`;
+            const zodiacSymbol = horoscopeData.symbol || '★'; // Default yıldız sembolü
+            
+            const periodText = {
+                daily: 'Günlük',
+                weekly: 'Haftalık',
+                monthly: 'Aylık',
+                yearly: 'Yıllık'
+            }[period] || 'Günlük';
+            
+            userHoroscopeContent.innerHTML = `
+                <div class="user-horoscope-card" style="background: linear-gradient(135deg, ${zodiacColor.replace('var(', 'rgba(').replace(')', ', 0.8)')}, var(--primary-night-blue))">
+                    <div class="card-header">
+                        <div class="zodiac-icon large" style="color: ${zodiacColor}; font-size: 2.5rem;">
+                            <span class="zodiac-symbol">${zodiacSymbol}</span>
+                        </div>
+                        <div class="header-content">
+                            <h3>${horoscopeData.burc}</h3>
+                            <p class="period-text">${periodText} Yorum - ${horoscopeData.tarih}</p>
+                            <p class="date-range">${horoscopeData.dateRange}</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <p class="horoscope-text">${horoscopeData.yorum}</p>
+                    </div>
+                    <div class="card-metadata">
+                        <div class="metadata-item">
+                            <i class="fas fa-quote-left" aria-hidden="true"></i>
+                            <span>Motto: ${horoscopeData.motto}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <i class="fas fa-globe" aria-hidden="true"></i>
+                            <span>Element: ${horoscopeData.element}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <i class="fas fa-star" aria-hidden="true"></i>
+                            <span>Gezegen: ${horoscopeData.gezegen}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
     } catch (error) {
         console.error('Burç yorumu yüklenirken hata:', error);
         showError('Burç yorumu yüklenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.');
@@ -165,14 +254,14 @@ const updateUserHoroscopeContent = (sign, data, period) => {
         yearly: 'Yıllık'
     }[period] || 'Günlük';
     
-    const zodiacIcon = data.icon || getZodiacIcon(sign);
     const zodiacColor = data.color || `var(--${sign}-color)`;
+    const zodiacSymbol = data.symbol || '★'; // Default yıldız sembolü
     
     userHoroscopeContent.innerHTML = `
         <div class="user-horoscope-card" style="background: linear-gradient(135deg, ${zodiacColor.replace('var(', 'rgba(').replace(')', ', 0.8)')}, var(--primary-night-blue))">
             <div class="card-header">
-                <div class="zodiac-icon large" style="color: ${zodiacColor}">
-                    <i class="fas ${zodiacIcon}" aria-hidden="true"></i>
+                <div class="zodiac-icon large" style="color: ${zodiacColor}; font-size: 2.5rem;">
+                    <span class="zodiac-symbol">${zodiacSymbol}</span>
                 </div>
                 <div class="header-content">
                     <h3>${data.burc}</h3>
@@ -205,25 +294,6 @@ const updateUserHoroscopeContent = (sign, data, period) => {
     `;
 };
 
-const getZodiacIcon = (sign) => {
-    const iconMap = {
-        aries: 'fas fa-fire',
-        taurus: 'fas fa-leaf',
-        gemini: 'fas fa-wind',
-        cancer: 'fas fa-water',
-        leo: 'fas fa-sun',
-        virgo: 'fas fa-seedling',
-        libra: 'fas fa-balance-scale',
-        scorpio: 'fas fa-bolt',
-        sagittarius: 'fas fa-arrow-alt-circle-up',
-        capricorn: 'fas fa-mountain',
-        aquarius: 'fas fa-tint',
-        pisces: 'fas fa-fish'
-    };
-    
-    return iconMap[sign.toLowerCase()] || 'fas fa-question';
-};
-
 const loadAllHoroscopes = async (period = 'daily') => {
     try {
         showLoading();
@@ -253,6 +323,7 @@ const loadAllHoroscopes = async (period = 'daily') => {
     }
 };
 
+// Burç kartlarını güncelle
 const updateHoroscopeGrid = (horoscopes, period = 'daily') => {
     if (!horoscopeGrid) return;
     
@@ -284,12 +355,12 @@ const updateHoroscopeGrid = (horoscopes, period = 'daily') => {
         const zodiacColor = data.color || `var(--${sign}-color)`;
         card.style.borderTop = `3px solid ${zodiacColor}`;
         
-        const iconClass = data.icon || getZodiacIcon(sign);
+        const zodiacSymbol = data.symbol || '★'; // Default yıldız sembolü
         
         card.innerHTML = `
             <div class="card-header">
-                <div class="zodiac-icon" style="color: ${zodiacColor}">
-                    <i class="fas ${iconClass}" aria-hidden="true"></i>
+                <div class="zodiac-icon" style="color: ${zodiacColor}; font-size: 2rem;">
+                    <span class="zodiac-symbol">${zodiacSymbol}</span>
                 </div>
                 <h2>${data.burc}</h2>
                 <p class="date-range">${data.dateRange || ''}</p>
@@ -311,10 +382,6 @@ const updateHoroscopeGrid = (horoscopes, period = 'daily') => {
                 <button class="read-more" onclick="showHoroscopeDetail('${sign}', '${period}')">
                     <i class="fas fa-arrow-right" aria-hidden="true"></i>
                     <span>Detaylı Bilgi</span>
-                </button>
-                <button class="select-sign" onclick="selectUserZodiac('${sign}')">
-                    <i class="fas fa-check-circle" aria-hidden="true"></i>
-                    <span>Burcum Bu</span>
                 </button>
             </div>
         `;
@@ -492,13 +559,23 @@ const saveUserZodiac = async () => {
         try {
             showLoading();
 
-            // Seçilen burcu localStorage'a kaydet
-            localStorage.setItem('userHoroscopeSign', select.value);
+            // Seçilen burç değerini API formatına çevir
+            const apiSignValue = convertSignToApiFormat(select.value);
+            console.log('Seçilen burç:', select.value, 'API formatı:', apiSignValue);
+
+            // API formatındaki burç değerini localStorage'a kaydet
+            localStorage.setItem('userHoroscopeSign', apiSignValue);
             
             // Eğer kullanıcı giriş yapmışsa, Firebase profiline de kaydet
             const user = await getCurrentUser();
             if (user && user.uid) {
-                await userService.updateHoroscopeSign(user.uid, select.value);
+                // horoscopeSign ve zodiacSign alanlarının her ikisini de güncelleyelim
+                await userService.updateHoroscopeSign(user.uid, apiSignValue);
+                
+                // zodiacSign alanını da güncelleyelim
+                const turkishSign = convertSignToTurkish(apiSignValue).toLowerCase();
+                await userService.updateUserProfile(user.uid, { zodiacSign: turkishSign });
+                console.log('Firebase profili güncellendi, horoscopeSign:', apiSignValue, 'zodiacSign:', turkishSign);
             }
             
             // Active olan tab'ı bul
@@ -506,7 +583,10 @@ const saveUserZodiac = async () => {
             const period = activeTab ? activeTab.dataset.period : 'daily';
             
             // Burç yorumunu yükle
-            await loadUserHoroscope(select.value, period);
+            await loadUserHoroscope(apiSignValue, period);
+            
+            // Başarı mesajı göster
+            showSuccess(`${convertSignToTurkish(apiSignValue)} burcu başarıyla seçildi!`);
             
         } catch (error) {
             console.error('Burç kaydedilirken hata:', error);
@@ -525,13 +605,23 @@ window.selectUserZodiac = async (sign) => {
         showLoading();
         console.log('Burcum bu seçildi:', sign);
         
-        // Seçilen burcu localStorage'a kaydet
-        localStorage.setItem('userHoroscopeSign', sign);
+        // Seçilen burç değerini API formatına çevir
+        const apiSignValue = convertSignToApiFormat(sign);
+        console.log('Seçilen burç:', sign, 'API formatı:', apiSignValue);
+
+        // API formatındaki burç değerini localStorage'a kaydet
+        localStorage.setItem('userHoroscopeSign', apiSignValue);
         
         // Eğer kullanıcı giriş yapmışsa, Firebase profiline de kaydet
         const user = await getCurrentUser();
         if (user && user.uid) {
-            await userService.updateHoroscopeSign(user.uid, sign);
+            // horoscopeSign ve zodiacSign alanlarının her ikisini de güncelleyelim
+            await userService.updateHoroscopeSign(user.uid, apiSignValue);
+            
+            // zodiacSign alanını da güncelleyelim
+            const turkishSign = convertSignToTurkish(apiSignValue).toLowerCase();
+            await userService.updateUserProfile(user.uid, { zodiacSign: turkishSign });
+            console.log('Firebase profili güncellendi, horoscopeSign:', apiSignValue, 'zodiacSign:', turkishSign);
         }
         
         // Active olan tab'ı bul
@@ -539,7 +629,7 @@ window.selectUserZodiac = async (sign) => {
         const period = activeTab ? activeTab.dataset.period : 'daily';
         
         // Burç yorumunu yükle
-        await loadUserHoroscope(sign, period);
+        await loadUserHoroscope(apiSignValue, period);
         
         // Sayfayı yukarı kaydır
         window.scrollTo({
@@ -548,7 +638,7 @@ window.selectUserZodiac = async (sign) => {
         });
         
         // Türkçe burç adını al
-        const burcAdi = horoscopeService.horoscopeCache[sign]?.daily?.burc || convertSignToTurkish(sign);
+        const burcAdi = horoscopeService.horoscopeCache[apiSignValue]?.daily?.burc || convertSignToTurkish(apiSignValue);
         
         // Başarılı mesajı göster
         showSuccess(`${burcAdi} burcu başarıyla seçildi!`);
@@ -588,7 +678,7 @@ window.showHoroscopeDetail = (sign, period = 'daily') => {
         }
         
         const zodiacColor = horoscope.color || `var(--${sign}-color)`;
-        const zodiacIcon = horoscope.icon || getZodiacIcon(sign);
+        const zodiacSymbol = horoscope.symbol || '★';
         
         // Periyot başlıklarını belirle
         const periodTitles = {
@@ -607,8 +697,8 @@ window.showHoroscopeDetail = (sign, period = 'daily') => {
                 <span class="close-button">&times;</span>
                 
                 <div class="modal-header">
-                    <div class="zodiac-icon large" style="color: ${zodiacColor}">
-                        <i class="fas ${zodiacIcon}" aria-hidden="true"></i>
+                    <div class="zodiac-icon large" style="color: ${zodiacColor}; font-size: 3rem;">
+                        <span class="zodiac-symbol">${zodiacSymbol}</span>
                     </div>
                     <div>
                         <h2>${horoscope.burc} Burcu</h2>
@@ -680,13 +770,6 @@ window.showHoroscopeDetail = (sign, period = 'daily') => {
                                 ${horoscope.anlasamadigiburclar.map(burc => `<li>${burc}</li>`).join('')}
                             </ul>
                         </div>
-                    </div>
-                    
-                    <div class="modal-actions">
-                        <button class="btn-select-sign" onclick="selectUserZodiac('${sign}')">
-                            <i class="fas fa-check-circle"></i>
-                            Burcum Bu
-                        </button>
                     </div>
                 </div>
             </div>
@@ -770,19 +853,56 @@ class HoroscopePage {
                 showUserPanel(user);
                 
                 // Burç bilgisini al, öncelikle Firebase'den
-                if (user.horoscopeSign) {
-                    horoscopeSign = user.horoscopeSign;
-                    // Eğer Firebase'de varsa localStorage'a da kaydet
-                    localStorage.setItem('userHoroscopeSign', horoscopeSign);
-                } 
-                // Firebase'de yoksa localStorage'dan kontrol et
-                else {
-                    horoscopeSign = localStorage.getItem('userHoroscopeSign');
+                console.log('Kullanıcı profili (init):', user); // Debug için
+                
+                // Burç bilgisini Firestore'dan almak için doğrudan kullanıcı profilini Firebase'den çek
+                try {
+                    // getUserProfile fonksiyonu iki farklı formatta dönüş yapabilir
+                    // 1. Direk veri nesnesi
+                    // 2. { success: true, data: {...} } formatında
+                    // Her iki durumu da kontrol etmeliyiz
+                    const userProfileResult = await userService.getUserProfile(user.uid);
+                    console.log('Firestore profil sonucu (init):', userProfileResult);
                     
-                    // Eğer localStorage'da varsa ve kullanıcı giriş yapmışsa, Firebase'e de kaydet
-                    if (horoscopeSign && user.uid) {
-                        await userService.updateHoroscopeSign(user.uid, horoscopeSign);
+                    let userProfile = null;
+                    if (userProfileResult && userProfileResult.success && userProfileResult.data) {
+                        // Format: { success: true, data: {...} }
+                        userProfile = userProfileResult.data;
+                    } else if (userProfileResult && typeof userProfileResult === 'object') {
+                        // Format: Direk veri nesnesi
+                        userProfile = userProfileResult;
                     }
+                    
+                    console.log('İşlenmiş profil verisi:', userProfile);
+                    
+                    // ÖNEMLİ DEĞİŞİKLİK: Her zaman zodiacSign'i öncelikle kullan (eğer varsa)
+                    if (userProfile && userProfile.zodiacSign) {
+                        const convertedSign = convertSignToApiFormat(userProfile.zodiacSign);
+                        await userService.updateHoroscopeSign(user.uid, convertedSign);
+                        horoscopeSign = convertedSign;
+                        console.log('zodiacSign değeri kullanılıyor (init):', horoscopeSign, 'Orijinal değer:', userProfile.zodiacSign);
+                    }
+                    // zodiacSign yoksa horoscopeSign'i kontrol et
+                    else if (userProfile && userProfile.horoscopeSign) {
+                        horoscopeSign = userProfile.horoscopeSign;
+                        console.log('Firestore burcu bulundu (init):', horoscopeSign);
+                        // Eğer Firebase'de varsa localStorage'a da kaydet
+                        localStorage.setItem('userHoroscopeSign', horoscopeSign);
+                    } else {
+                        // Firebase'de yoksa localStorage'dan kontrol et
+                        horoscopeSign = localStorage.getItem('userHoroscopeSign');
+                        console.log('localStorage burcu (init):', horoscopeSign);
+                        
+                        // Eğer localStorage'da varsa ve kullanıcı giriş yapmışsa, Firebase'e de kaydet
+                        if (horoscopeSign && user.uid) {
+                            await userService.updateHoroscopeSign(user.uid, horoscopeSign);
+                        }
+                    }
+                } catch (profileError) {
+                    console.error('Profil bilgileri alınırken hata (init):', profileError);
+                    // Hata olursa localStorage'dan kontrol et
+                    horoscopeSign = localStorage.getItem('userHoroscopeSign');
+                    console.log('Hata sonrası localStorage burcu (init):', horoscopeSign);
                 }
                 
                 if (horoscopeSign) {
@@ -803,7 +923,7 @@ class HoroscopePage {
                 }
             }
             
-        await this.loadAllHoroscopes();
+            await this.loadAllHoroscopes();
         } catch (error) {
             console.error('Initialization error:', error);
             showError('Sayfa yüklenirken bir hata oluştu.');
@@ -900,28 +1020,78 @@ class HoroscopePage {
         try {
             showLoading();
             
+            // Burç ismi Türkçe olabilir veya farklı formatta olabilir, API formatına çevirelim
+            const normalizedSign = convertSignToApiFormat(sign);
+            console.log('Normalize edilmiş burç (displayUserHoroscope):', normalizedSign, 'Orijinal değer:', sign);
+            
             let data;
             switch (this.currentPeriod) {
                 case 'daily':
-                    data = await horoscopeService.getDailyHoroscope(sign);
+                    data = await horoscopeService.getDailyHoroscope(normalizedSign);
                     break;
                 case 'weekly':
-                    data = await horoscopeService.getWeeklyHoroscope(sign);
+                    data = await horoscopeService.getWeeklyHoroscope(normalizedSign);
                     break;
                 case 'monthly':
-                    data = await horoscopeService.getMonthlyHoroscope(sign);
+                    data = await horoscopeService.getMonthlyHoroscope(normalizedSign);
                     break;
                 case 'yearly':
-                    data = await horoscopeService.getYearlyHoroscope(sign);
+                    data = await horoscopeService.getYearlyHoroscope(normalizedSign);
                     break;
                 default:
-                    data = await horoscopeService.getDailyHoroscope(sign);
+                    data = await horoscopeService.getDailyHoroscope(normalizedSign);
             }
             
-            updateUserHoroscopeContent(sign, data, this.currentPeriod);
+            console.log('Yüklenen burç yorumu (displayUserHoroscope):', data);
+            console.log('Gösterilecek burç adı:', data.burc);
+            
+            // Doğrudan içeriği güncelle
+            if (userHoroscopeContent) {
+                const zodiacColor = data.color || `var(--${normalizedSign}-color)`;
+                const zodiacSymbol = data.symbol || '★'; // Default yıldız sembolü
+                
+                const periodText = {
+                    daily: 'Günlük',
+                    weekly: 'Haftalık',
+                    monthly: 'Aylık',
+                    yearly: 'Yıllık'
+                }[this.currentPeriod] || 'Günlük';
+                
+                userHoroscopeContent.innerHTML = `
+                    <div class="user-horoscope-card" style="background: linear-gradient(135deg, ${zodiacColor.replace('var(', 'rgba(').replace(')', ', 0.8)')}, var(--primary-night-blue))">
+                        <div class="card-header">
+                            <div class="zodiac-icon large" style="color: ${zodiacColor}; font-size: 2.5rem;">
+                                <span class="zodiac-symbol">${zodiacSymbol}</span>
+                            </div>
+                            <div class="header-content">
+                                <h3>${data.burc}</h3>
+                                <p class="period-text">${periodText} Yorum - ${data.tarih}</p>
+                                <p class="date-range">${data.dateRange}</p>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p class="horoscope-text">${data.yorum}</p>
+                        </div>
+                        <div class="card-metadata">
+                            <div class="metadata-item">
+                                <i class="fas fa-quote-left" aria-hidden="true"></i>
+                                <span>Motto: ${data.motto}</span>
+                            </div>
+                            <div class="metadata-item">
+                                <i class="fas fa-globe" aria-hidden="true"></i>
+                                <span>Element: ${data.element}</span>
+                            </div>
+                            <div class="metadata-item">
+                                <i class="fas fa-star" aria-hidden="true"></i>
+                                <span>Gezegen: ${data.gezegen}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
         } catch (error) {
-            console.error('Error displaying horoscope:', error);
-            showError('Burç yorumu görüntülenirken bir hata oluştu.');
+            console.error('Burç yorumu yüklenirken hata:', error);
+            showError('Burç yorumu yüklenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.');
         } finally {
             hideLoading();
         }
@@ -958,12 +1128,12 @@ class HoroscopePage {
             const zodiacColor = data.color || `var(--${sign}-color)`;
             card.style.borderTop = `3px solid ${zodiacColor}`;
             
-            const iconClass = data.icon || getZodiacIcon(sign);
+            const zodiacSymbol = data.symbol || '★'; // Default yıldız sembolü
             
             card.innerHTML = `
                 <div class="card-header">
-                    <div class="zodiac-icon" style="color: ${zodiacColor}">
-                        <i class="fas ${iconClass}" aria-hidden="true"></i>
+                    <div class="zodiac-icon" style="color: ${zodiacColor}; font-size: 2rem;">
+                        <span class="zodiac-symbol">${zodiacSymbol}</span>
                     </div>
                     <h2>${data.burc}</h2>
                     <p class="date-range">${data.dateRange || ''}</p>
@@ -985,10 +1155,6 @@ class HoroscopePage {
                     <button class="read-more" onclick="showHoroscopeDetail('${sign}', '${period}')">
                         <i class="fas fa-arrow-right" aria-hidden="true"></i>
                         <span>Detaylı Bilgi</span>
-                    </button>
-                    <button class="select-sign" onclick="selectUserZodiac('${sign}')">
-                        <i class="fas fa-check-circle" aria-hidden="true"></i>
-                        <span>Burcum Bu</span>
                     </button>
                 </div>
             `;

@@ -22,62 +22,174 @@
     <!-- Styles -->
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/horoscope.css">
+    <style>
+        :root {
+            --primary-dark: #0d1642;
+            --secondary-dark: #1a237e;
+            --accent-gold: #ffd700;
+            --text-cream: #f5f5f5;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Open Sans', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark));
+            color: var(--text-cream);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            margin: 0;
+        }
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(13, 22, 66, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        .logo-container i {
+            color: var(--accent-gold);
+            font-size: 1.5rem;
+        }
+        .logo-text {
+            color: var(--text-cream);
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        .profile-section {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent-gold);
+            color: #222;
+            font-weight: 700;
+            border-radius: 12px;
+            border: 2px solid #fff;
+            padding: 0.6rem 1.2rem 0.6rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: box-shadow 0.2s, border 0.2s;
+            position: relative;
+        }
+        .profile-btn i {
+            color: #222;
+            font-size: 1.2rem;
+        }
+        .profile-btn .username {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #222;
+        }
+        .profile-btn .fa-chevron-down {
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+        }
+        .profile-btn:focus, .profile-btn.active {
+            outline: 2px solid var(--accent-gold);
+            border: 2px solid var(--accent-gold);
+        }
+        .profile-dropdown {
+            position: absolute;
+            top: 110%;
+            right: 0;
+            background: #181c2f;
+            border-radius: 12px;
+            min-width: 210px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            padding: 0.5rem 0;
+            z-index: 1000;
+            display: none;
+            border: 1.5px solid #23284d;
+        }
+        .profile-dropdown.active {
+            display: block;
+            animation: fadeIn 0.25s;
+        }
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.85rem 1.3rem;
+            color: var(--text-cream);
+            text-decoration: none;
+            font-size: 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .dropdown-item i {
+            font-size: 1.1rem;
+            width: 22px;
+            text-align: center;
+        }
+        .dropdown-item:hover {
+            background: #23284d;
+            color: var(--accent-gold);
+        }
+        .dropdown-divider {
+            height: 1px;
+            background: #23284d;
+            margin: 0.3rem 0;
+        }
+        .dropdown-item.logout {
+            color: #ff4d4d;
+        }
+        .dropdown-item.logout i {
+            color: #ff4d4d;
+        }
+        .dropdown-item.logout:hover {
+            background: #23284d;
+            color: #ff4d4d;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        main { padding-top: 5rem; }
+    </style>
 </head>
 <body class="horoscope-page">
-    <!-- Header -->
-    <header class="site-header">
-        <a href="../../index.html" class="header-logo">
-            <i class="fas fa-moon" aria-hidden="true"></i>
-            <span>Rüya Atlası</span>
+    <div class="top-bar">
+        <a href="/index.html" class="logo-container">
+            <i class="fas fa-moon"></i>
+            <span class="logo-text">Rüya Atlası</span>
         </a>
-        
-        <!-- Auth Buttons (for guests) -->
-        <nav class="auth-buttons" id="guestNav">
-            <a href="login.html" class="btn btn-login">
-                <i class="fas fa-user" aria-hidden="true"></i>
-                <span>Giriş Yap</span>
-            </a>
-            <a href="signup.html" class="btn btn-signup">
-                <i class="fas fa-user-plus" aria-hidden="true"></i>
-                <span>Üye Ol</span>
-            </a>
-        </nav>
-
-        <!-- User Profile Panel (for logged in users) -->
-        <div class="user-panel" id="userPanel" style="display: none;">
-            <button class="user-menu-button" id="userMenuButton" aria-haspopup="true" aria-expanded="false">
-                <div class="user-avatar">
-                    <i class="fas fa-user-circle" aria-hidden="true"></i>
-                </div>
-                <span class="user-name">Kullanıcı</span>
-                <i class="fas fa-chevron-down" aria-hidden="true"></i>
+        <div class="profile-section">
+            <button class="profile-btn" id="profileToggle" tabindex="0">
+                <i class="fas fa-user-circle"></i>
+                <span class="username" id="profileUsername">Kullanıcı</span>
+                <i class="fas fa-chevron-down"></i>
             </button>
-            <div class="user-dropdown" id="userDropdown" aria-labelledby="userMenuButton">
-                <a href="profile.html" class="dropdown-item">
-                    <i class="fas fa-user" aria-hidden="true"></i>
-                    <span>Profilim</span>
-                </a>
-                <a href="my-dreams.html" class="dropdown-item">
-                    <i class="fas fa-book" aria-hidden="true"></i>
-                    <span>Rüyalarım</span>
-                </a>
-                <a href="favorites.html" class="dropdown-item">
-                    <i class="fas fa-star" aria-hidden="true"></i>
-                    <span>Favorilerim</span>
-                </a>
-                <a href="settings.html" class="dropdown-item">
-                    <i class="fas fa-cog" aria-hidden="true"></i>
-                    <span>Ayarlar</span>
-                </a>
-                <button class="dropdown-item logout-button" id="logoutButton">
-                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
-                    <span>Çıkış Yap</span>
-                </button>
+            <div class="profile-dropdown" id="profileDropdown">
+                <a href="profile.html" class="dropdown-item"><i class="fas fa-user"></i>Profilim</a>
+                <a href="my-dreams.html" class="dropdown-item"><i class="fas fa-book"></i>Rüyalarım</a>
+                <a href="favorites.html" class="dropdown-item"><i class="fas fa-star"></i>Favorilerim</a>
+                <a href="profile.html#personal-info" class="dropdown-item"><i class="fas fa-cog"></i>Ayarlar</a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i>Çıkış Yap</a>
             </div>
         </div>
-    </header>
-
-    <!-- Main Content -->
+    </div>
     <main class="horoscope-main">
         <div class="horoscope-container">
             <h1>Günlük Burç Yorumları</h1>
@@ -120,5 +232,102 @@
     <script type="module" src="../js/userService.js"></script>
     <script type="module" src="../js/horoscopeService.js"></script>
     <script type="module" src="../js/horoscope.js"></script>
+    
+    <script type="module">
+        import { auth, db } from '../js/firebase-config.js';
+        import { onAuthStateChanged } from 'firebase/auth';
+        import { doc, getDoc } from 'firebase/firestore';
+        
+        const usernameSpan = document.getElementById('profileUsername');
+        
+        onAuthStateChanged(auth, async (user) => {
+            if (user && usernameSpan) {
+                console.log("Kullanıcı oturum açtı:", user);
+                
+                // Önce Firestore'dan kullanıcı profilini al
+                try {
+                    const userDocRef = doc(db, 'users', user.uid);
+                    const userSnapshot = await getDoc(userDocRef);
+                    
+                    if (userSnapshot.exists() && userSnapshot.data().username) {
+                        // Firestore'da kayıtlı username varsa onu kullan
+                        usernameSpan.textContent = userSnapshot.data().username;
+                        console.log("Kullanıcı adı Firestore'dan alındı:", userSnapshot.data().username);
+                    } else {
+                        // Yoksa auth'taki displayName veya email'i kullan
+                        usernameSpan.textContent = user.displayName || (user.email ? user.email.split('@')[0] : 'Kullanıcı');
+                        console.log("Kullanıcı adı Auth'tan alındı:", usernameSpan.textContent);
+                    }
+                } catch (error) {
+                    console.error("Kullanıcı profili alınamadı:", error);
+                    // Hata durumunda auth'taki bilgiyi kullan
+                    usernameSpan.textContent = user.displayName || (user.email ? user.email.split('@')[0] : 'Kullanıcı');
+                }
+            } else if(usernameSpan) {
+                usernameSpan.textContent = 'Kullanıcı';
+            }
+        });
+    </script>
+    
+    <script>
+        // Profile dropdown functionality
+        const profileToggle = document.getElementById('profileToggle');
+        const profileDropdown = document.getElementById('profileDropdown');
+        profileToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('active');
+            profileToggle.classList.toggle('active');
+        });
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!profileToggle.contains(e.target) && !profileDropdown.contains(e.target)) {
+                profileDropdown.classList.remove('active');
+                profileToggle.classList.remove('active');
+            }
+        });
+        // Keyboard accessibility
+        profileToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                profileDropdown.classList.toggle('active');
+                profileToggle.classList.toggle('active');
+            }
+        });
+        // Logout functionality
+        const logoutBtn = document.getElementById('logoutBtn');
+        logoutBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                // Firebase authentication'dan çıkış yap
+                const { logout } = await import('../js/userService.js');
+                await logout();
+                console.log('Başarıyla çıkış yapıldı');
+                // Çıkış sonrası login sayfasına yönlendir
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Çıkış yapılırken hata oluştu:', error);
+            }
+        });
+    </script>
+
+    <script type="module">
+        import { auth } from '../js/firebase-config.js';
+        import { onAuthStateChanged } from 'firebase/auth';
+        
+        // Korumalı sayfa kontrolü
+        function checkAuth() {
+            onAuthStateChanged(auth, user => {
+                if (!user) {
+                    console.log('Burç yorumları sayfası için yetkilendirme gerekli.');
+                    window.location.href = '/src/pages/signup.html';
+                } else {
+                    console.log('Kullanıcı oturum açmış. Erişim izni verildi.');
+                }
+            });
+        }
+        
+        // Sayfa yüklendiğinde auth kontrolünü çalıştır
+        document.addEventListener('DOMContentLoaded', checkAuth);
+    </script>
 </body>
 </html> 

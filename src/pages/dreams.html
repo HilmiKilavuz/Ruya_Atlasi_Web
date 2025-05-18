@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rüyalarım - Rüya Atlası</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Firebase Scripts -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
+    
+    <!-- App Scripts -->
+    <script type="module" src="../js/firebase-config.js"></script>
+    <script type="module" src="../js/userService.js"></script>
+    <style>
+        :root {
+            --primary-dark: #0d1642;
+            --secondary-dark: #1a237e;
+            --accent-gold: #ffd700;
+            --text-cream: #f5f5f5;
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2.5rem;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Open Sans', sans-serif;
+            --transition-normal: 0.3s;
+        }
+        body {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark));
+            color: var(--text-cream);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            margin: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .floating-icons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .floating-icon {
+            position: absolute;
+            color: rgba(255, 215, 0, 0.1);
+            font-size: 1.5rem;
+            animation: float 15s infinite linear;
+        }
+        .floating-icon:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-icon:nth-child(2) { top: 20%; left: 80%; animation-delay: -2s; }
+        .floating-icon:nth-child(3) { top: 50%; left: 20%; animation-delay: -4s; }
+        .floating-icon:nth-child(4) { top: 70%; left: 70%; animation-delay: -6s; }
+        .floating-icon:nth-child(5) { top: 30%; left: 50%; animation-delay: -8s; }
+        .floating-icon:nth-child(6) { top: 80%; left: 30%; animation-delay: -10s; }
+        .floating-icon:nth-child(7) { top: 40%; left: 90%; animation-delay: -12s; }
+        .floating-icon:nth-child(8) { top: 90%; left: 60%; animation-delay: -14s; }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(50px, 50px) rotate(90deg);
+            }
+            50% {
+                transform: translate(0, 100px) rotate(180deg);
+            }
+            75% {
+                transform: translate(-50px, 50px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(13, 22, 66, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .logo-container i {
+            color: var(--accent-gold);
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            color: var(--text-cream);
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .profile-section {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent-gold);
+            color: #222;
+            font-weight: 700;
+            border-radius: 12px;
+            border: 2px solid #fff;
+            padding: 0.6rem 1.2rem 0.6rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: box-shadow 0.2s, border 0.2s;
+            position: relative;
+        }
+        .profile-btn i {
+            color: #222;
+            font-size: 1.2rem;
+        }
+        .profile-btn .username {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #222;
+        }
+        .profile-btn .fa-chevron-down {
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+        }
+        .profile-btn:focus, .profile-btn.active {
+            outline: 2px solid var(--accent-gold);
+            border: 2px solid var(--accent-gold);
+        }
+        .profile-dropdown {
+            position: absolute;
+            top: 110%;
+            right: 0;
+            background: #181c2f;
+            border-radius: 12px;
+            min-width: 210px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            padding: 0.5rem 0;
+            z-index: 1000;
+            display: none;
+            border: 1.5px solid #23284d;
+        }
+        .profile-dropdown.active {
+            display: block;
+            animation: fadeIn 0.25s;
+        }
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.85rem 1.3rem;
+            color: var(--text-cream);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background 0.2s, color 0.2s;
+        }
+        .dropdown-item i {
+            font-size: 1.1rem;
+            width: 22px;
+            text-align: center;
+        }
+        .dropdown-item:hover {
+            background: #23284d;
+            color: var(--accent-gold);
+        }
+        .dropdown-divider {
+            height: 1px;
+            background: #23284d;
+            margin: 0.3rem 0;
+        }
+        .dropdown-item.logout {
+            color: #ff4d4d;
+        }
+        .dropdown-item.logout i {
+            color: #ff4d4d;
+        }
+        .dropdown-item.logout:hover {
+            background: #23284d;
+            color: #ff4d4d;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Rüya listesi stilleri */
+        .dreams-container {
+            padding-top: 6rem;
+            padding-bottom: 3rem;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h1 {
+            font-family: var(--font-heading);
+            color: var(--accent-gold);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            color: var(--text-cream);
+            opacity: 0.8;
+        }
+        
+        .dreams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .dream-card {
+            background: rgba(35, 40, 77, 0.8);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .dream-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .dream-date {
+            font-size: 0.85rem;
+            color: var(--accent-gold);
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+        
+        .dream-title {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--text-cream);
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+        
+        .dream-content {
+            color: var(--text-cream);
+            opacity: 0.9;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .dream-interpretation {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        
+        .interpretation-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .interpretation-text {
+            color: var(--text-cream);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .dream-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .dream-tag {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--accent-gold);
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            margin-right: 0.5rem;
+            display: inline-block;
+        }
+        
+        .actions-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--text-cream);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.25rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+        
+        .action-btn:hover {
+            color: var(--accent-gold);
+            transform: scale(1.1);
+        }
+        
+        .action-btn.favorite {
+            color: var(--accent-gold);
+        }
+        
+        .dream-tags {
+            margin-bottom: 1rem;
+            min-height: 1.5rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: rgba(35, 40, 77, 0.8);
+            border-radius: 15px;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--accent-gold);
+            opacity: 0.5;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state h2 {
+            color: var(--text-cream);
+            font-family: var(--font-heading);
+        }
+        
+        .empty-state p {
+            color: var(--text-cream);
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+        
+        .new-dream-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .new-dream-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        /* Mobil Responsive */
+        @media (max-width: 768px) {
+            .dreams-container {
+                padding: 5rem 1rem 2rem;
+            }
+            
+            .dreams-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Dreams page specific styles */
+        .dreams-container {
+            padding-top: 6rem; /* Add space for fixed top bar */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 3rem;
+        }
+
+        .page-title {
+            font-family: var(--font-heading);
+            color: var(--accent-gold);
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .dream-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .dream-item {
+            background: rgba(35, 40, 77, 0.95);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dream-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .dream-date {
+            color: var(--accent-gold);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .dream-content {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+
+        .dream-interpretation {
+            background: rgba(255, 255, 255, 0.07);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .dream-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .dream-tag {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--accent-gold);
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+        }
+
+        .dream-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--text-cream);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .action-btn:hover {
+            color: var(--accent-gold);
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.1);
+        }
+        
+        .favorite-btn {
+            color: var(--text-cream);
+        }
+        
+        .favorite-btn.active {
+            color: var(--accent-gold);
+        }
+        
+        .delete-btn {
+            color: var(--text-cream);
+        }
+        
+        .delete-btn:hover {
+            color: #ff4d4d;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 2rem;
+            padding: 2rem;
+            background: rgba(35, 40, 77, 0.6);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        .empty-state h3 {
+            font-family: var(--font-heading);
+            color: var(--accent-gold);
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--text-cream);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .dream-new-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .dream-new-btn:hover {
+            background: #ffe066;
+            transform: translateY(-2px);
+        }
+
+        .dream-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin: 2rem 0;
+        }
+
+        .dream-loading .fa-spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 768px) {
+            .dreams-container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            .page-title {
+                font-size: 1.8rem;
+            }
+            .dream-item {
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="/index.html" class="logo-container">
+            <i class="fas fa-moon"></i>
+            <span class="logo-text">Rüya Atlası</span>
+        </a>
+        <div class="profile-section">
+            <button class="profile-btn" id="profileToggle" tabindex="0">
+                <i class="fas fa-user-circle"></i>
+                <span class="username" id="profileUsername">Kullanıcı</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="profile-dropdown" id="profileDropdown">
+                <a href="profile.html" class="dropdown-item"><i class="fas fa-user"></i>Profilim</a>
+                <a href="dreams.html" class="dropdown-item"><i class="fas fa-book"></i>Rüyalarım</a>
+                <a href="favorites.html" class="dropdown-item"><i class="fas fa-star"></i>Favorilerim</a>
+                <a href="profile.html#personal-info" class="dropdown-item"><i class="fas fa-cog"></i>Ayarlar</a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i>Çıkış Yap</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="floating-icons">
+        <i class="fas fa-moon floating-icon"></i>
+        <i class="fas fa-star floating-icon"></i>
+        <i class="fas fa-cloud-moon floating-icon"></i>
+        <i class="fas fa-magic floating-icon"></i>
+        <i class="fas fa-sparkles floating-icon"></i>
+        <i class="fas fa-crystal-ball floating-icon"></i>
+        <i class="fas fa-wand-magic-sparkles floating-icon"></i>
+        <i class="fas fa-feather-alt floating-icon"></i>
+    </div>
+    
+    <div class="dreams-container">
+        <h1 class="page-title"><i class="fas fa-book"></i> Rüyalarım</h1>
+        <div id="dreamsList" class="dream-list">
+            <!-- Dreams will be loaded here -->
+            <div id="loadingIndicator" class="dream-loading">
+                <i class="fas fa-spinner"></i> Rüyalarınız yükleniyor...
+            </div>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { auth, db } from '../js/firebase-config.js';
+        import { onAuthStateChanged } from 'firebase/auth';
+        import { doc, getDoc } from 'firebase/firestore';
+        import { getUserDreams, toggleFavorite, deleteDream } from '../js/dream-service.js';
+        
+        const usernameSpan = document.getElementById('profileUsername');
+        const dreamsList = document.getElementById('dreamsList');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        
+        onAuthStateChanged(auth, async (user) => {
+            if (user && usernameSpan) {
+                // Önce Firestore'dan kullanıcı profilini al
+                try {
+                    const userDocRef = doc(db, 'users', user.uid);
+                    const userSnapshot = await getDoc(userDocRef);
+                    
+                    if (userSnapshot.exists() && userSnapshot.data().username) {
+                        // Firestore'da kayıtlı username varsa onu kullan
+                        usernameSpan.textContent = userSnapshot.data().username;
+                    } else {
+                        // Yoksa auth'taki displayName veya email'i kullan
+                        usernameSpan.textContent = user.displayName || (user.email ? user.email.split('@')[0] : 'Kullanıcı');
+                    }
+                    
+                    // Kullanıcının rüyalarını yükle
+                    loadUserDreams(user.uid);
+                    
+                } catch (error) {
+                    console.error("Kullanıcı profili alınamadı:", error);
+                    // Hata durumunda auth'taki bilgiyi kullan
+                    usernameSpan.textContent = user.displayName || (user.email ? user.email.split('@')[0] : 'Kullanıcı');
+                    
+                    // Yine de rüyaları yüklemeyi dene
+                    loadUserDreams(user.uid);
+                }
+            } else {
+                // Kullanıcı oturum açmamışsa login sayfasına yönlendir
+                window.location.href = 'login.html';
+            }
+        });
+        
+        // Kullanıcının rüyalarını yükle
+        async function loadUserDreams(userId) {
+            try {
+                const result = await getUserDreams(userId);
+                
+                // Yükleme göstergesini kaldır
+                loadingIndicator.style.display = 'none';
+                
+                if (result.success && result.dreams.length > 0) {
+                    // Rüyaları listele
+                    result.dreams.forEach(dream => {
+                        const dreamElement = createDreamElement(dream);
+                        dreamsList.appendChild(dreamElement);
+                    });
+                } else {
+                    // Hiç rüya yoksa boş durum mesajı göster
+                    showEmptyState();
+                }
+            } catch (error) {
+                console.error('Rüyalar yüklenirken hata:', error);
+                loadingIndicator.style.display = 'none';
+                dreamsList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Bir hata oluştu</h3>
+                        <p>Rüyalarınız yüklenirken bir sorun oluştu. Lütfen daha sonra tekrar deneyin.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Rüya öğesi oluştur
+        function createDreamElement(dream) {
+            const dreamItem = document.createElement('div');
+            dreamItem.className = 'dream-item';
+            dreamItem.id = `dream-${dream.id}`;
+            
+            // Rüya tarihi oluştur
+            const date = new Date(dream.date);
+            const formattedDate = date.toLocaleDateString('tr-TR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            // Rüya etiketlerini oluştur
+            const tagElements = dream.tags && dream.tags.length
+                ? dream.tags.map(tag => `<span class="dream-tag">${tag}</span>`).join('')
+                : '';
+            
+            // Rüya içeriğini kes (çok uzunsa)
+            const maxContentLength = 150;
+            const displayContent = dream.content.length > maxContentLength
+                ? dream.content.substring(0, maxContentLength) + '...'
+                : dream.content;
+            
+            // Favori durumuna göre ikonu ayarla
+            const favoriteIcon = dream.isFavorite
+                ? '<i class="fas fa-star"></i>'
+                : '<i class="far fa-star"></i>';
+            
+            // HTML içeriği oluştur
+            dreamItem.innerHTML = `
+                <span class="dream-date">${formattedDate}</span>
+                <div class="dream-content">${displayContent}</div>
+                <div class="dream-interpretation"><b>Yorum:</b> ${dream.interpretation}</div>
+                ${tagElements ? `<div class="dream-tags">${tagElements}</div>` : ''}
+                <div class="dream-actions">
+                    <button class="action-btn favorite-btn ${dream.isFavorite ? 'active' : ''}" data-dream-id="${dream.id}" data-is-favorite="${dream.isFavorite}">
+                        ${favoriteIcon}
+                    </button>
+                    <button class="action-btn delete-btn" data-dream-id="${dream.id}">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            `;
+            
+            // Favori butonuna olay dinleyici ekle
+            const favoriteBtn = dreamItem.querySelector('.favorite-btn');
+            favoriteBtn.addEventListener('click', async function() {
+                const dreamId = this.getAttribute('data-dream-id');
+                const isFavorite = this.getAttribute('data-is-favorite') === 'true';
+                const newFavoriteState = !isFavorite;
+                
+                try {
+                    // Favori durumunu güncelle
+                    const result = await toggleFavorite(dreamId, newFavoriteState);
+                    
+                    if (result.success) {
+                        // UI'ı güncelle
+                        this.setAttribute('data-is-favorite', newFavoriteState);
+                        this.classList.toggle('active', newFavoriteState);
+                        this.innerHTML = newFavoriteState
+                            ? '<i class="fas fa-star"></i>'
+                            : '<i class="far fa-star"></i>';
+                        
+                        console.log(`Rüya favorilere ${newFavoriteState ? 'eklendi' : 'çıkarıldı'}`);
+                    }
+                } catch (error) {
+                    console.error('Favori durumu güncellenirken hata:', error);
+                }
+            });
+            
+            // Silme butonuna olay dinleyici ekle
+            const deleteBtn = dreamItem.querySelector('.delete-btn');
+            deleteBtn.addEventListener('click', async function() {
+                const dreamId = this.getAttribute('data-dream-id');
+                if (confirm('Bu rüyayı silmek istediğinize emin misiniz?')) {
+                    try {
+                        console.log('Silme işlemi başlatılıyor. Dream ID:', dreamId);
+                        const result = await deleteDream(dreamId);
+                        
+                        if (result.success) {
+                            // Rüyayı UI'dan kaldır
+                            const dreamElement = document.getElementById(`dream-${dreamId}`);
+                            dreamElement.style.animation = 'fadeOut 0.3s forwards';
+                            
+                            setTimeout(() => {
+                                dreamElement.remove();
+                                
+                                // Eğer son rüya da silindiyse, boş durum mesajı göster
+                                if (dreamsList.querySelectorAll('.dream-item').length === 0) {
+                                    showEmptyState();
+                                }
+                            }, 300);
+                            
+                            console.log('Rüya başarıyla silindi');
+                        } else {
+                            console.error('Silme işlemi başarısız:', result.error);
+                            alert('Rüya silinirken bir hata oluştu.');
+                        }
+                    } catch (error) {
+                        console.error('Rüya silinirken hata:', error);
+                        alert('Rüya silinirken bir hata oluştu.');
+                    }
+                }
+            });
+            
+            return dreamItem;
+        }
+        
+        // Boş durum mesajını göster
+        function showEmptyState() {
+            dreamsList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-book-open"></i>
+                    <h3>Henüz kaydedilmiş rüyanız yok</h3>
+                    <p>Rüyalarınızı yorumlatıp kaydederek burada görebilirsiniz.</p>
+                    <a href="dream.html" class="dream-new-btn">
+                        <i class="fas fa-plus"></i> Yeni Rüya Yorumlat
+                    </a>
+                </div>
+            `;
+        }
+
+        // CSS keyframe'i oluştur
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translateY(0); }
+                to { opacity: 0; transform: translateY(-20px); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Profile dropdown functionality
+        const profileToggle = document.getElementById('profileToggle');
+        const profileDropdown = document.getElementById('profileDropdown');
+        
+        profileToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('active');
+            profileToggle.classList.toggle('active');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!profileToggle.contains(e.target) && !profileDropdown.contains(e.target)) {
+                profileDropdown.classList.remove('active');
+                profileToggle.classList.remove('active');
+            }
+        });
+        
+        // Keyboard accessibility
+        profileToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                profileDropdown.classList.toggle('active');
+                profileToggle.classList.toggle('active');
+            }
+        });
+        
+        // Logout functionality
+        const logoutBtn = document.getElementById('logoutBtn');
+        logoutBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                // Firebase authentication'dan çıkış yap
+                const { logout } = await import('../js/userService.js');
+                await logout();
+                console.log('Başarıyla çıkış yapıldı');
+                // Çıkış sonrası login sayfasına yönlendir
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Çıkış yapılırken hata oluştu:', error);
+            }
+        });
+    </script>
+</body>
+</html> 

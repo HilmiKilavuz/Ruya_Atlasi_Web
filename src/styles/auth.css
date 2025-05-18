@@ -121,26 +121,215 @@
     font-size: 14px;
 }
 
-/* Checkbox */
+/* Email Verification */
+.verification-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+}
+
+.verification-group input {
+    flex: 1;
+    padding: 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-cream);
+    font-size: 1.2rem;
+    letter-spacing: 5px;
+    text-align: center;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.verification-group input:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.3);
+}
+
+.verification-group input::placeholder {
+    letter-spacing: normal;
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+.resend-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-cream);
+    border: 1px solid var(--accent-gold);
+    border-radius: 5px;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.resend-button:hover {
+    background: rgba(255, 215, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.resend-button:active {
+    transform: translateY(0);
+}
+
+.resend-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.resend-button i {
+    font-size: 12px;
+}
+
+.info-text {
+    display: block;
+    color: var(--text-cream);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    opacity: 0.8;
+}
+
+#emailVerificationStep {
+    animation: fadeIn 0.5s ease;
+}
+
+#emailVerificationStep.verified .info-text:after {
+    content: ' ✓';
+    color: var(--accent-gold);
+    font-weight: bold;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Checkbox Yeni Tasarım */
 .checkbox-group {
     margin: 1rem 0;
 }
 
 .checkbox-label {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 0.25rem;
     cursor: pointer;
+    font-size: 14px;
+    padding-left: 36px;
+    color: var(--text-cream);
+    user-select: none;
 }
 
+/* Gerçek checkbox input'u (gizli) */
 .checkbox-label input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    opacity: 0;
     cursor: pointer;
+    z-index: 10;
+    margin: 0;
 }
 
+/* Custom checkbox kutusu */
+.checkbox-label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(255, 215, 0, 0.4);
+    border-radius: 5px;
+    transition: all 0.2s;
+}
+
+/* Tıklama efekti */
+.checkbox-label:hover::before {
+    background-color: rgba(255, 255, 255, 0.12);
+    border-color: var(--accent-gold);
+}
+
+/* Tik işareti (başlangıçta görünmez) */
+.checkbox-label::after {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    margin-top: -8px;
+    width: 7px;
+    height: 12px;
+    border: solid var(--primary-dark);
+    border-width: 0 3px 3px 0;
+    opacity: 0;
+    transform: rotate(45deg) scale(0);
+    transition: all 0.2s;
+}
+
+/* Aktif durumda kutunun arka planı ve kenarları */
+.checkbox-label input[type="checkbox"]:checked ~ ::before {
+    background-color: var(--accent-gold);
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+/* Aktif durumda tik işareti */
+.checkbox-label input[type="checkbox"]:checked ~ ::after {
+    opacity: 1;
+    transform: rotate(45deg) scale(1);
+}
+
+/* Checkbox içindeki metin */
 .checkbox-text {
-    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.4;
+    flex-wrap: wrap;
+}
+
+/* Checkbox içindeki ikon */
+.checkbox-text i {
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.3s;
+    flex-shrink: 0;
+}
+
+/* Aktif durumda ikon */
+.checkbox-label input[type="checkbox"]:checked ~ .checkbox-text i {
+    color: var(--accent-gold);
+    filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.5));
+}
+
+/* Checkbox içindeki bağlantı */
+.checkbox-text a {
+    color: var(--accent-gold);
+    text-decoration: underline;
+    transition: all 0.2s;
+}
+
+.checkbox-text a:hover {
+    text-decoration: none;
+    filter: brightness(120%);
 }
 
 /* Auth Actions */
@@ -173,6 +362,49 @@
     margin-top: 1rem;
     color: var(--text-cream);
     font-size: 0.9rem;
+}
+
+/* Notifications */
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(26, 35, 126, 0.9);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notification i {
+    font-size: 18px;
+}
+
+.notification.success {
+    background: rgba(46, 125, 50, 0.9);
+    border-left: 4px solid #2ecc71;
+}
+
+.notification.error {
+    background: rgba(183, 28, 28, 0.9);
+    border-left: 4px solid #e74c3c;
+}
+
+.notification.info {
+    background: rgba(13, 71, 161, 0.9);
+    border-left: 4px solid #3498db;
 }
 
 /* Floating Elements */
@@ -232,23 +464,69 @@
 /* Messages */
 .error-message,
 .success-message {
-    padding: 0.75rem;
+    padding: 14px 18px;
     border-radius: 8px;
-    margin-bottom: 1rem;
-    text-align: center;
-    font-size: 0.9rem;
+    margin-bottom: 20px;
+    font-weight: 500;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    position: relative;
+    animation: slideIn 0.3s ease-out;
 }
 
 .error-message {
-    background: rgba(244, 67, 54, 0.1);
-    border: 1px solid #f44336;
-    color: #f44336;
+    background-color: rgba(255, 77, 77, 0.15);
+    border-left: 4px solid #ff4d4d;
+    color: #ff4d4d;
 }
 
 .success-message {
-    background: rgba(76, 175, 80, 0.1);
-    border: 1px solid #4caf50;
-    color: #4caf50;
+    background-color: rgba(0, 204, 102, 0.15);
+    border-left: 4px solid #00cc66;
+    color: #00cc66;
+}
+
+.error-message::before,
+.success-message::before {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.error-message::before {
+    content: '\f06a'; /* exclamation-circle */
+}
+
+.success-message::before {
+    content: '\f058'; /* check-circle */
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form grup hata stili */
+.form-group.error input,
+.form-group.error select {
+    border-color: #ff4d4d;
+    background-color: rgba(255, 77, 77, 0.05);
+}
+
+.error-text {
+    color: #ff4d4d;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+    font-weight: 500;
 }
 
 /* Responsive Design */
@@ -381,4 +659,129 @@
     color: var(--text-light);
     display: block;
     text-align: right;
+}
+
+/* Variable colors */
+:root {
+    --error-color: #ff4d4d;
+    --success-color: #4CAF50;
+    --warning-color: #ff9800;
+}
+
+/* Giriş sayfasına yönlendirme */
+.login-redirect {
+    background-color: rgba(26, 35, 126, 0.15);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 20px 0;
+    text-align: center;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.login-redirect p {
+    margin-bottom: 12px;
+    color: var(--color-text-alt);
+    font-weight: 500;
+}
+
+.login-redirect .btn {
+    background: var(--color-accent);
+    color: var(--color-primary);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
+    display: inline-block;
+    text-decoration: none;
+}
+
+.login-redirect .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+/* Login sayfası için form düzeni */
+#loginForm {
+    max-width: 450px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+#loginForm .form-group {
+    margin-bottom: 1.25rem;
+}
+
+#loginForm input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-cream);
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+#loginForm input:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.3);
+}
+
+#loginForm .checkbox-group {
+    margin-bottom: 1.75rem;
+}
+
+#loginForm .auth-submit {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+/* Responsive düzenleme - küçük ekranlar için */
+@media (max-width: 768px) {
+    #loginForm {
+        padding: 1rem;
+    }
+}
+
+@keyframes glowPulse {
+    0% {
+        filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.3));
+    }
+    50% {
+        filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
+    }
+    100% {
+        filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.3));
+    }
+}
+
+@keyframes checkmark {
+    0% {
+        opacity: 0;
+        transform: translateY(-50%) rotate(45deg) scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-50%) rotate(45deg) scale(1.2);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(-50%) rotate(45deg) scale(1);
+    }
+}
+
+.checkbox-label input:checked ~ .checkbox-text i {
+    color: var(--accent-gold);
+    filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.5));
+    animation: glowPulse 2s infinite;
+}
+
+.checkbox-label input:checked ~ ::after {
+    opacity: 1;
+    transform: translateY(-50%) rotate(45deg) scale(1);
+    animation: checkmark 0.4s ease-out;
 } 

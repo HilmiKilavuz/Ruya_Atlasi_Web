@@ -26,7 +26,7 @@ const handleAuthStateChange = (user) => {
                         <i class="fas fa-star"></i>
                         Favorilerim
                     </a>
-                    <a href="src/pages/settings.html" class="profile-menu-item">
+                    <a href="src/pages/profile.html#personal-info" class="profile-menu-item">
                         <i class="fas fa-cog"></i>
                         Ayarlar
                     </a>
@@ -103,15 +103,16 @@ const signupButton = document.getElementById('signupButton');
 
 // Auth durumunu dinle
 onAuthStateChanged(auth, (user) => {
-    if (user) {
-        // Kullanıcı giriş yapmış
-        profileButton.style.display = 'inline-flex';
-        loginButton.style.display = 'none';
-        signupButton.style.display = 'none';
-    } else {
-        // Kullanıcı giriş yapmamış
-        profileButton.style.display = 'none';
-        loginButton.style.display = 'inline-flex';
-        signupButton.style.display = 'inline-flex';
+    // Her düğme var mı diye kontrol et ve varsa görünürlüğünü değiştir
+    if (profileButton) {
+        profileButton.style.display = user ? 'inline-flex' : 'none';
+    }
+    
+    if (loginButton) {
+        loginButton.style.display = user ? 'none' : 'inline-flex';
+    }
+    
+    if (signupButton) {
+        signupButton.style.display = user ? 'none' : 'inline-flex';
     }
 }); 

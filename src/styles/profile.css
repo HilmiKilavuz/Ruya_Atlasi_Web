@@ -38,6 +38,58 @@ body {
     text-decoration: none;
 }
 
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.settings-nav-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-light);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.settings-nav-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.settings-nav-button i {
+    color: var(--accent);
+    font-size: 1.1rem;
+}
+
+.home-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 30px;
+    background: var(--accent);
+    color: var(--primary-dark);
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 3px 10px rgba(255, 215, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.home-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
+}
+
+.home-button i {
+    font-size: 1.1rem;
+}
+
 .back-button {
     display: flex;
     align-items: center;
@@ -151,7 +203,16 @@ body {
 }
 
 .form-group input,
-.form-group select,
+.form-group select {
+    padding: 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-light);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
 .form-group textarea {
     padding: 0.8rem;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -160,6 +221,11 @@ body {
     color: var(--text-light);
     font-size: 1rem;
     transition: all 0.3s ease;
+    height: 120px;
+    resize: none;
+    min-height: 120px;
+    max-height: 120px;
+    overflow-y: auto;
 }
 
 .form-group input:disabled,
@@ -180,16 +246,15 @@ body {
 /* İstatistikler */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
     margin-top: 1rem;
 }
 
 .stat-item {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
     padding: 1rem;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 15px;
@@ -201,10 +266,24 @@ body {
     background: rgba(255, 255, 255, 0.15);
 }
 
+.stat-item i {
+    color: var(--accent);
+    font-size: 1.5rem;
+    min-width: 30px;
+    text-align: center;
+}
+
+.stat-item > div {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
 .stat-number {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: bold;
     color: var(--accent);
+    margin-left: 0.5rem;
 }
 
 .stat-label {
@@ -302,30 +381,53 @@ body {
     background: #f44336;
 }
 
+/* Vurgulama animasyonu */
+@keyframes highlightSection {
+    0% { box-shadow: 0 0 0 rgba(255, 215, 0, 0); }
+    50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); }
+    100% { box-shadow: 0 0 0 rgba(255, 215, 0, 0); }
+}
+
+.highlight-section {
+    animation: highlightSection 1.5s ease-out;
+}
+
 /* Responsive tasarım */
 @media (max-width: 768px) {
     .profile-content {
         grid-template-columns: 1fr;
     }
-
+    
     .form-row {
         grid-template-columns: 1fr;
     }
-
+    
     .profile-name {
         font-size: 2rem;
     }
-
+    
     .main-nav {
-        padding: 1rem;
+        padding: 0.8rem 1.2rem;
     }
-
+    
     .nav-logo {
         font-size: 1.2rem;
     }
-
-    .back-button span {
+    
+    .home-button span,
+    .settings-nav-button span {
         display: none;
+    }
+    
+    .home-button,
+    .settings-nav-button {
+        padding: 0.6rem;
+    }
+    
+    .home-button i,
+    .settings-nav-button i {
+        font-size: 1.2rem;
+        margin: 0;
     }
 }
 
@@ -372,6 +474,7 @@ body {
     transform: translateY(-20px);
     transition: transform 0.3s ease;
     box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .modal.show .modal-content {
@@ -412,6 +515,23 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+}
+
+.password-info {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.password-info p {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+}
+
+.password-info strong {
+    color: var(--accent);
+    word-break: break-all;
 }
 
 .password-input-group {
@@ -479,6 +599,69 @@ body {
 .strength-text {
     font-size: 0.8rem;
     color: var(--text-light);
+}
+
+/* Şifre değiştirme adımları */
+.password-step {
+    display: none;
+}
+
+.password-step.active {
+    display: block;
+}
+
+.code-info {
+    font-size: 0.8rem;
+    color: var(--accent);
+    margin-top: 0.5rem;
+}
+
+.secondary-button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 20px;
+    border: 1px solid var(--accent);
+    font-size: 1rem;
+    background: transparent;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.secondary-button:hover {
+    background: rgba(255, 215, 0, 0.1);
+}
+
+/* Şifre gücü göstergesi animasyonu */
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.6;
+    }
+}
+
+.strength-bar.weak::before {
+    animation: pulse 2s infinite;
+}
+
+.strength-bar.medium::before {
+    animation: pulse 2s infinite;
+}
+
+.strength-bar.strong::before {
+    animation: pulse 1.5s infinite;
+}
+
+/* Doğrulama kodları için özel stil */
+#verificationCode {
+    font-size: 1.2rem;
+    text-align: center;
+    letter-spacing: 5px;
+    font-weight: bold;
 }
 
 /* Responsive Modal */

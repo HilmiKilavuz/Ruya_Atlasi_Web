@@ -18,6 +18,78 @@
     <link rel="stylesheet" href="/src/styles/main.css">
     <link rel="stylesheet" href="/src/styles/auth.css">
     <link rel="stylesheet" href="/src/styles/animations.css">
+    
+    <style>
+        /* Basit, Etkili, Kesinlikle Çalışan Checkbox */
+        .clickable-checkbox {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding-left: 36px;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .clickable-checkbox input {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 3;
+        }
+        
+        .custom-checkbox {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            background-color: rgba(255,255,255,0.1);
+            border: 2px solid #ffd700;
+            border-radius: 4px;
+        }
+        
+        .clickable-checkbox input:checked ~ .custom-checkbox {
+            background-color: #ffd700;
+        }
+        
+        .custom-checkbox:after {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 4px;
+            width: 5px;
+            height: 10px;
+            border: solid #0d1642;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            display: none;
+        }
+        
+        .clickable-checkbox input:checked ~ .custom-checkbox:after {
+            display: block;
+        }
+        
+        .checkbox-text {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        
+        .checkbox-text a {
+            color: #ffd700;
+            text-decoration: underline;
+        }
+        
+        .checkbox-text a:hover {
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body class="auth-page">
     <main class="auth-main">
@@ -106,6 +178,22 @@
                                            placeholder="ornek@email.com">
                                 </div>
 
+                                <div class="form-group" id="emailVerificationStep" style="display: none;">
+                                    <label for="verificationCode">
+                                        <i class="fas fa-key"></i>
+                                        Doğrulama Kodu
+                                    </label>
+                                    <div class="verification-group">
+                                        <input type="text" id="verificationCode" name="verificationCode" 
+                                               placeholder="E-posta adresinize gönderilen kod" maxlength="6">
+                                        <button type="button" class="resend-button" id="resendVerificationButton">
+                                            <i class="fas fa-sync-alt"></i>
+                                            Tekrar Gönder
+                                        </button>
+                                    </div>
+                                    <small class="info-text">E-posta adresinize gönderilen 6 haneli doğrulama kodunu giriniz.</small>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="password">
                                         <i class="fas fa-lock"></i>
@@ -141,9 +229,11 @@
                         </div>
 
                         <div class="form-group checkbox-group">
-                            <label class="checkbox-label">
+                            <label class="clickable-checkbox">
                                 <input type="checkbox" name="terms" required>
+                                <div class="custom-checkbox"></div>
                                 <span class="checkbox-text">
+                                    <i class="fas fa-star fa-xs"></i>
                                     <a href="../pages/terms.html" target="_blank">Kullanım Koşulları</a>'nı ve 
                                     <a href="../pages/privacy.html" target="_blank">Gizlilik Politikası</a>'nı kabul ediyorum
                                 </span>
@@ -151,7 +241,11 @@
                         </div>
 
                         <div class="auth-actions">
-                            <button type="submit" class="auth-submit">
+                            <button type="button" class="auth-submit" id="verifyEmailButton">
+                                <i class="fas fa-envelope-open-text"></i>
+                                E-postamı Doğrula
+                            </button>
+                            <button type="submit" class="auth-submit" id="completeSignupButton" style="display: none;">
                                 <i class="fas fa-user-plus"></i>
                                 Üye Ol
                             </button>

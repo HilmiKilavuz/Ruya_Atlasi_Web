@@ -4,7 +4,10 @@ import {
     signInWithEmailAndPassword,
     signOut,
     updateProfile,
-    onAuthStateChanged
+    onAuthStateChanged,
+    setPersistence,
+    browserLocalPersistence,
+    browserSessionPersistence
 } from 'firebase/auth';
 import { 
     doc, 
@@ -54,9 +57,14 @@ export const userService = {
     },
 
     // Kullanıcı girişi
-    async login(email, password) {
+    async login(email, password, rememberMe = false) {
         try {
-            console.log('Giriş işlemi başlatılıyor...', { email }); // Debug log
+            console.log('Giriş işlemi başlatılıyor...', { email, rememberMe }); // Debug log
+
+            // Set persistence based on "Remember Me" checkbox
+            const persistence = rememberMe ? browserLocalPersistence : browserSessionPersistence;
+            await setPersistence(auth, persistence);
+            console.log('Persistence ayarlandı:', rememberMe ? 'Local' : 'Session'); // Debug log
 
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
@@ -72,6 +80,9 @@ export const userService = {
             if (userProfile && userProfile.horoscopeSign) {
                 localStorage.setItem('userHoroscopeSign', userProfile.horoscopeSign);
             }
+
+            // Remember Me durumunu localStorage'a kaydet
+            localStorage.setItem('rememberMe', rememberMe.toString());
 
             return user;
         } catch (error) {

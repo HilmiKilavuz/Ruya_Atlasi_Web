@@ -1,4 +1,4 @@
-import { db } from './firebase-config';
+import { db } from './firebase-config.js';
 import { 
     collection,
     addDoc,
@@ -9,7 +9,10 @@ import {
     doc,
     getDoc,
     updateDoc,
-    deleteDoc
+    deleteDoc,
+    arrayUnion,
+    arrayRemove,
+    Timestamp
 } from 'firebase/firestore';
 
 // Rüya kaydetme
@@ -17,14 +20,15 @@ export const saveDream = async (userId, dreamData) => {
     try {
         const dreamRef = await addDoc(collection(db, 'dreams'), {
             userId,
-            title: dreamData.title,
+            title: dreamData.title || 'İsimsiz Rüya',
             content: dreamData.content,
-            date: dreamData.date,
-            mood: dreamData.mood,
+            date: dreamData.date || new Date().toISOString(),
+            mood: dreamData.mood || 'nötr',
             interpretation: dreamData.interpretation,
-            tags: dreamData.tags,
+            tags: dreamData.tags || [],
             createdAt: new Date().toISOString(),
-            isPublic: dreamData.isPublic || false
+            isPublic: dreamData.isPublic || false,
+            isFavorite: dreamData.isFavorite || false
         });
 
         return { success: true, dreamId: dreamRef.id };
@@ -37,10 +41,10 @@ export const saveDream = async (userId, dreamData) => {
 // Kullanıcının rüyalarını getir
 export const getUserDreams = async (userId) => {
     try {
+        // First try with the simple query without sorting (no index required)
         const q = query(
             collection(db, 'dreams'),
-            where('userId', '==', userId),
-            orderBy('date', 'desc')
+            where('userId', '==', userId)
         );
 
         const querySnapshot = await getDocs(q);
@@ -49,9 +53,61 @@ export const getUserDreams = async (userId) => {
             dreams.push({ id: doc.id, ...doc.data() });
         });
 
+        // Sort dreams by date in JavaScript after fetching
+        dreams.sort((a, b) => {
+            const dateA = new Date(a.date).getTime();
+            const dateB = new Date(b.date).getTime();
+            return dateB - dateA; // descending order (newest first)
+        });
+
         return { success: true, dreams };
     } catch (error) {
         console.error('Rüyaları getirme hatası:', error);
+        return { success: false, error: error.message };
+    }
+};
+
+// Kullanıcının favori rüyalarını getir
+export const getFavoriteDreams = async (userId) => {
+    try {
+        // First try with a simpler query to avoid index issues
+        const q = query(
+            collection(db, 'dreams'),
+            where('userId', '==', userId),
+            where('isFavorite', '==', true)
+        );
+
+        const querySnapshot = await getDocs(q);
+        const dreams = [];
+        querySnapshot.forEach((doc) => {
+            dreams.push({ id: doc.id, ...doc.data() });
+        });
+
+        // Sort dreams by date in JavaScript after fetching
+        dreams.sort((a, b) => {
+            const dateA = new Date(a.date).getTime();
+            const dateB = new Date(b.date).getTime();
+            return dateB - dateA; // descending order (newest first)
+        });
+
+        return { success: true, dreams };
+    } catch (error) {
+        console.error('Favori rüyaları getirme hatası:', error);
+        return { success: false, error: error.message };
+    }
+};
+
+// Rüyayı favorilere ekle/çıkar
+export const toggleFavorite = async (dreamId, isFavorite) => {
+    try {
+        await updateDoc(doc(db, 'dreams', dreamId), {
+            isFavorite: isFavorite,
+            updatedAt: new Date().toISOString()
+        });
+
+        return { success: true };
+    } catch (error) {
+        console.error('Favori durumu güncelleme hatası:', error);
         return { success: false, error: error.message };
     }
 };

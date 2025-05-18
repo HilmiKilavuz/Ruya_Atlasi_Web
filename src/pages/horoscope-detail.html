@@ -78,5 +78,24 @@
     <script type="module" src="../js/firebase-config.js"></script>
     <script type="module" src="../js/userService.js"></script>
     <script type="module" src="../js/horoscope-detail.js"></script>
+    <script type="module">
+        import { auth } from '../js/firebase-config.js';
+        import { onAuthStateChanged } from 'firebase/auth';
+        
+        // Korumalı sayfa kontrolü
+        function checkAuth() {
+            onAuthStateChanged(auth, user => {
+                if (!user) {
+                    console.log('Burç detay sayfası için yetkilendirme gerekli.');
+                    window.location.href = '/src/pages/signup.html';
+                } else {
+                    console.log('Kullanıcı oturum açmış. Erişim izni verildi.');
+                }
+            });
+        }
+        
+        // Sayfa yüklendiğinde auth kontrolünü çalıştır
+        document.addEventListener('DOMContentLoaded', checkAuth);
+    </script>
 </body>
 </html> 

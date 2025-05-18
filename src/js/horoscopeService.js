@@ -16,21 +16,152 @@ const HOROSCOPE_SIGNS = [
 
 // Burç isimlerini API formatına çeviren yardımcı fonksiyon
 const convertSignToApiFormat = (sign) => {
+    // Eğer sign parametresi null veya undefined ise, hata logla ve varsayılan döndür
+    if (!sign) {
+        console.error('Burç bilgisi bulunamadı (null/undefined), varsayılan olarak "aries" kullanılıyor');
+        return 'aries';
+    }
+    
+    // String değilse, string'e çevir ve uyarı ver
+    if (typeof sign !== 'string') {
+        console.warn(`Burç bilgisi string değil, tür: ${typeof sign}. String'e çevriliyor.`);
+        sign = String(sign);
+    }
+    
+    // Boş string kontrolü
+    if (sign.trim() === '') {
+        console.error('Burç bilgisi boş string, varsayılan olarak "aries" kullanılıyor');
+        return 'aries';
+    }
+    
+    // Küçük harfe çevir ve trim yap
+    const normalizedSign = sign.toLowerCase().trim();
+    console.log('convertSignToApiFormat - Giriş değeri:', sign, 'Normalize edilmiş değer:', normalizedSign);
+    
+    // İngilizce burç isimleri doğrudan döndürülsün (tam eşleşme)
+    if (HOROSCOPE_SIGNS.includes(normalizedSign)) {
+        console.log('İngilizce burç adı bulundu (tam eşleşme):', normalizedSign);
+        return normalizedSign;
+    }
+    
+    // Türkçe burç isimleri için kapsamlı eşleştirme tablosu
     const signMap = {
+        // Koç burcu varyasyonları
+        'koç': 'aries',
         'koc': 'aries',
+        'koc burcu': 'aries',
+        'koç burcu': 'aries',
+        
+        // Boğa burcu varyasyonları
+        'boğa': 'taurus',
         'boga': 'taurus',
+        'boğa burcu': 'taurus',
+        'boga burcu': 'taurus',
+        
+        // İkizler burcu varyasyonları
         'ikizler': 'gemini',
+        'ikizler burcu': 'gemini',
+        
+        // Yengeç burcu varyasyonları
+        'yengeç': 'cancer',
         'yengec': 'cancer',
+        'yengeç burcu': 'cancer',
+        'yengec burcu': 'cancer',
+        
+        // Aslan burcu varyasyonları
         'aslan': 'leo',
+        'aslan burcu': 'leo',
+        
+        // Başak burcu varyasyonları
+        'başak': 'virgo',
         'basak': 'virgo',
+        'başak burcu': 'virgo',
+        'basak burcu': 'virgo',
+        
+        // Terazi burcu varyasyonları
         'terazi': 'libra',
+        'terazi burcu': 'libra',
+        
+        // Akrep burcu varyasyonları
         'akrep': 'scorpio',
+        'akrep burcu': 'scorpio',
+        
+        // Yay burcu varyasyonları
         'yay': 'sagittarius',
+        'yay burcu': 'sagittarius',
+        
+        // Oğlak burcu varyasyonları
+        'oğlak': 'capricorn',
         'oglak': 'capricorn',
+        'oğlak burcu': 'capricorn',
+        'oglak burcu': 'capricorn',
+        
+        // Kova burcu varyasyonları
         'kova': 'aquarius',
-        'balik': 'pisces'
+        'kova burcu': 'aquarius',
+        
+        // Balık burcu varyasyonları
+        'balık': 'pisces',
+        'balik': 'pisces',
+        'balık burcu': 'pisces',
+        'balik burcu': 'pisces'
     };
-    return signMap[sign.toLowerCase()] || sign.toLowerCase();
+    
+    // Tam eşleşme kontrolü
+    if (signMap[normalizedSign]) {
+        console.log('Türkçe burç adı eşleşti (tam eşleşme):', normalizedSign, '->', signMap[normalizedSign]);
+        return signMap[normalizedSign];
+    }
+    
+    // Türkçe karakterleri kaldırma
+    const withoutTurkishChars = normalizedSign
+        .replace(/ç/g, 'c')
+        .replace(/ğ/g, 'g')
+        .replace(/ı/g, 'i')
+        .replace(/ö/g, 'o')
+        .replace(/ş/g, 's')
+        .replace(/ü/g, 'u');
+    
+    console.log('Türkçe karakterler kaldırıldı:', withoutTurkishChars);
+    
+    // Türkçe karaktersiz tam eşleşme kontrolü
+    if (signMap[withoutTurkishChars]) {
+        console.log('Türkçe karaktersiz eşleşme bulundu (tam eşleşme):', withoutTurkishChars, '->', signMap[withoutTurkishChars]);
+        return signMap[withoutTurkishChars];
+    }
+    
+    // İngilizce kısmi eşleşme kontrolü
+    for (const englishSign of HOROSCOPE_SIGNS) {
+        if (normalizedSign.includes(englishSign) || englishSign.includes(normalizedSign)) {
+            console.log('İngilizce burç adı bulundu (kısmi eşleşme):', normalizedSign, '->', englishSign);
+            return englishSign;
+        }
+    }
+    
+    // Türkçe kısmi eşleşme kontrolü
+    for (const [turkishName, englishName] of Object.entries(signMap)) {
+        // İki yönlü kısmi eşleşme kontrolü
+        if (normalizedSign.includes(turkishName) || turkishName.includes(normalizedSign)) {
+            console.log('Türkçe burç adı eşleşti (kısmi eşleşme):', normalizedSign, '->', englishName);
+            return englishName;
+        }
+        
+        // Türkçe karaktersiz kısmi eşleşme kontrolü
+        if (withoutTurkishChars.includes(turkishName.replace(/ç/g, 'c').replace(/ğ/g, 'g').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ş/g, 's').replace(/ü/g, 'u')) || 
+            turkishName.replace(/ç/g, 'c').replace(/ğ/g, 'g').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ş/g, 's').replace(/ü/g, 'u').includes(withoutTurkishChars)) {
+            console.log('Türkçe karaktersiz eşleşme bulundu (kısmi eşleşme):', withoutTurkishChars, '->', englishName);
+            return englishName;
+        }
+    }
+    
+    // Özel durum: "yay" kelimesi "sagittarius" olarak çevrilmeli
+    if (normalizedSign === 'yay' || normalizedSign.includes('yay') || withoutTurkishChars === 'yay' || withoutTurkishChars.includes('yay')) {
+        console.log('Özel durum tespit edildi - "yay" kelimesi bulundu:', normalizedSign, '-> sagittarius');
+        return 'sagittarius';
+    }
+    
+    console.error(`Geçersiz burç adı: "${sign}". Varsayılan olarak "aries" kullanılıyor.`);
+    return 'aries';
 };
 
 // Burç isimlerini Türkçe'ye çeviren yardımcı fonksiyon
@@ -67,7 +198,8 @@ const ZODIAC_PROPERTIES = {
         anlastigiburclar: ['Aslan', 'Yay'],
         anlasamadigiburclar: ['Yengeç', 'Terazi'],
         color: 'var(--aries-color)',
-        icon: 'fa-fire'
+        icon: 'fa-fire',
+        symbol: '♈'
     },
     taurus: {
         element: 'Toprak',
@@ -82,7 +214,8 @@ const ZODIAC_PROPERTIES = {
         anlastigiburclar: ['Başak', 'Oğlak'],
         anlasamadigiburclar: ['Aslan', 'Kova'],
         color: 'var(--taurus-color)',
-        icon: 'fa-leaf'
+        icon: 'fa-leaf',
+        symbol: '♉'
     },
     gemini: {
         element: 'Hava',
@@ -97,7 +230,8 @@ const ZODIAC_PROPERTIES = {
         anlastigiburclar: ['Terazi', 'Kova'],
         anlasamadigiburclar: ['Başak', 'Balık'],
         color: 'var(--gemini-color)',
-        icon: 'fa-wind'
+        icon: 'fa-wind',
+        symbol: '♊'
     },
     cancer: {
         element: 'Su',
@@ -112,7 +246,8 @@ const ZODIAC_PROPERTIES = {
         anlastigiburclar: ['Akrep', 'Balık'],
         anlasamadigiburclar: ['Koç', 'Terazi'],
         color: 'var(--cancer-color)',
-        icon: 'fa-water'
+        icon: 'fa-water',
+        symbol: '♋'
     },
     leo: {
         element: 'Ateş',
@@ -127,7 +262,8 @@ const ZODIAC_PROPERTIES = {
         anlastigiburclar: ['Koç', 'Yay'],
         anlasamadigiburclar: ['Boğa', 'Akrep'],
         color: 'var(--leo-color)',
-        icon: 'fa-sun'
+        icon: 'fa-sun',
+        symbol: '♌'
     },
     virgo: {
         element: 'Toprak',
@@ -142,7 +278,8 @@ const ZODIAC_PROPERTIES = {
         anlastigiburclar: ['Boğa', 'Oğlak'],
         anlasamadigiburclar: ['İkizler', 'Balık'],
         color: 'var(--virgo-color)',
-        icon: 'fa-seedling'
+        icon: 'fa-seedling',
+        symbol: '♍'
     },
     libra: {
         element: 'Hava',
@@ -157,7 +294,8 @@ const ZODIAC_PROPERTIES = {
         anlastigiburclar: ['İkizler', 'Kova'],
         anlasamadigiburclar: ['Yengeç', 'Oğlak'],
         color: 'var(--libra-color)',
-        icon: 'fa-balance-scale'
+        icon: 'fa-balance-scale',
+        symbol: '♎'
     },
     scorpio: {
         element: 'Su',
@@ -172,7 +310,8 @@ const ZODIAC_PROPERTIES = {
         anlastigiburclar: ['Yengeç', 'Balık'],
         anlasamadigiburclar: ['Aslan', 'Kova'],
         color: 'var(--scorpio-color)',
-        icon: 'fa-bolt'
+        icon: 'fa-bolt',
+        symbol: '♏'
     },
     sagittarius: {
         element: 'Ateş',
@@ -187,7 +326,8 @@ const ZODIAC_PROPERTIES = {
         anlastigiburclar: ['Koç', 'Aslan'],
         anlasamadigiburclar: ['İkizler', 'Başak'],
         color: 'var(--sagittarius-color)',
-        icon: 'fa-arrow-alt-circle-up'
+        icon: 'fa-arrow-alt-circle-up',
+        symbol: '♐'
     },
     capricorn: {
         element: 'Toprak',
@@ -202,7 +342,8 @@ const ZODIAC_PROPERTIES = {
         anlastigiburclar: ['Boğa', 'Başak'],
         anlasamadigiburclar: ['Koç', 'Terazi'],
         color: 'var(--capricorn-color)',
-        icon: 'fa-mountain'
+        icon: 'fa-mountain',
+        symbol: '♑'
     },
     aquarius: {
         element: 'Hava',
@@ -217,7 +358,8 @@ const ZODIAC_PROPERTIES = {
         anlastigiburclar: ['İkizler', 'Terazi'],
         anlasamadigiburclar: ['Boğa', 'Akrep'],
         color: 'var(--aquarius-color)',
-        icon: 'fa-tint'
+        icon: 'fa-tint',
+        symbol: '♒'
     },
     pisces: {
         element: 'Su',
@@ -232,7 +374,8 @@ const ZODIAC_PROPERTIES = {
         anlastigiburclar: ['Yengeç', 'Akrep'],
         anlasamadigiburclar: ['İkizler', 'Başak'],
         color: 'var(--pisces-color)',
-        icon: 'fa-fish'
+        icon: 'fa-fish',
+        symbol: '♓'
     }
 };
 
@@ -486,6 +629,7 @@ const generateHoroscope = (sign, period = 'daily') => {
         uyumsuzBurclar: compatibility.uyumsuzBurclar,
         color: properties.color,
         icon: properties.icon,
+        symbol: properties.symbol,
         dateRange: getDateRangeForSign(sign),
         period: period
     };
@@ -590,7 +734,7 @@ class HoroscopeService {
                 // Son güncelleme tarihini kaydet
                 this.lastUpdatedDate = todayStr;
                 console.log('Tüm burç yorumları yenilendi. Tarih:', todayStr);
-            } catch (error) {
+        } catch (error) {
                 console.error('Burç yorumları yüklenirken hata:', error);
             }
         } else {
@@ -637,13 +781,13 @@ class HoroscopeService {
         });
         return Promise.resolve(readings);
     }
-    
+
     // Tüm günlük burç yorumlarını al
     getAllDailyHoroscopes() {
         // Her istekte güncellemeleri kontrol et
         this.checkAndUpdate();
         
-        const horoscopes = [];
+            const horoscopes = [];
         HOROSCOPE_SIGNS.forEach(sign => {
             horoscopes.push({
                 sign: sign,
@@ -685,7 +829,7 @@ class HoroscopeService {
         if (!this.horoscopeCache[sign] || !this.horoscopeCache[sign].monthly) {
             this.horoscopeCache[sign] = this.horoscopeCache[sign] || {};
             this.horoscopeCache[sign].monthly = generateHoroscope(sign, 'monthly');
-        }
+            }
         return Promise.resolve(this.horoscopeCache[sign].monthly);
     }
     
@@ -721,7 +865,7 @@ class HoroscopeService {
         else if (sign1Props.anlasamadigiburclar.includes(sign2Name)) {
             compatibility.score = Math.floor(Math.random() * 30) + 30; // 30-60 arası
             compatibility.description = `${convertSignToTurkish(sign1)} ve ${sign2Name} arasında zorlayıcı bir uyum olabilir.`;
-        }
+    }
         // Ne anlaşan ne de anlaşamayan listesinde değilse
         else {
             compatibility.score = Math.floor(Math.random() * 20) + 60; // 60-80 arası
@@ -740,5 +884,5 @@ class HoroscopeService {
     }
 }
 
-export const horoscopeService = new HoroscopeService();
-export { convertSignToTurkish }; 
+export const horoscopeService = new HoroscopeService(); 
+export { convertSignToTurkish, convertSignToApiFormat }; 
