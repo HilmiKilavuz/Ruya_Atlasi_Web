@@ -2,6 +2,9 @@ import { auth } from './firebase-config';
 import { saveDream, getUserDreams } from './dream-service';
 import { onAuthChange } from './auth-service';
 
+// Ahmet'in bilgisayarındaki Flask API URL'i
+const API_URL = "http://10.196.143.149:5000/yorumla";
+
 document.addEventListener('DOMContentLoaded', () => {
     // Loading screen
     const loadingScreen = document.getElementById('loadingScreen');
@@ -16,11 +19,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Form elements
     const dreamForm = document.getElementById('dreamForm');
-    const dreamContent = document.getElementById('dreamContent');
+    const dreamContent = document.getElementById('dreamText');
     const currentCount = document.getElementById('currentCount');
     const maxCount = document.getElementById('maxCount');
     const resultSection = document.querySelector('.dream-result-section');
     const newDreamButton = document.querySelector('.new-dream-button');
+    const interpreterSelect = document.getElementById('interpreter');
 
     // Auth state listener
     let currentUser = null;
@@ -55,13 +59,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Get form data
-            const formData = new FormData(dreamForm);
+            // Get form data directly from the input fields for consistency
+            const dreamText = document.getElementById('dreamText').value;
+            const selectedInterpreter = interpreterSelect ? interpreterSelect.value : "1";
+            
+            if (!dreamText.trim()) {
+                alert('Lütfen rüyanızı yazın.');
+                return;
+            }
+
             const dreamData = {
-                title: formData.get('dreamTitle'),
-                date: formData.get('dreamDate'),
-                content: formData.get('dreamContent'),
-                mood: formData.get('dreamMood'),
+                title: 'Rüya Yorumu', // Sabit başlık veya form elemanından alınabilir
+                date: new Date().toISOString(),
+                content: dreamText,
+                mood: 'nötr', // Varsayılan duygu durumu
                 interpretation: '', // AI yorumu eklenecek
                 tags: [], // AI tarafından belirlenecek
                 isPublic: false
@@ -71,23 +82,42 @@ document.addEventListener('DOMContentLoaded', () => {
             dreamForm.closest('.dream-input-section').style.display = 'none';
             resultSection.style.display = 'block';
 
-            // Update result section with dream details
-            document.querySelector('.dream-title').textContent = dreamData.title;
-            document.querySelector('.dream-date').textContent = new Date(dreamData.date)
-                .toLocaleDateString('tr-TR', { 
-                    weekday: 'long', 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                });
-            document.querySelector('.original-dream').textContent = dreamData.content;
+            // Display the dream content directly
+            const originalDream = document.querySelector('.original-dream');
+            if (originalDream) {
+                originalDream.textContent = dreamText;
+            }
 
             try {
-                // Simulate AI interpretation (to be replaced with actual AI call)
-                const interpretation = "Bu rüya, içsel dönüşüm ve kişisel gelişim sürecinizi yansıtıyor. " +
-                    "Rüyanızdaki semboller, hayatınızdaki değişimlere hazır olduğunuzu gösteriyor. " +
-                    "Önünüzdeki dönemde yeni fırsatlarla karşılaşabilirsiniz.";
-                const tags = ['Dönüşüm', 'Kişisel Gelişim', 'Yeni Başlangıçlar'];
+                // Yükleme göstergesini göster
+                document.querySelector('.loading-interpretation').style.display = 'block';
+                
+                // Flask API'ye istek atarak rüya yorumunu al
+                const apiResponse = await fetch(API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        ruya: dreamText,
+                        secim: selectedInterpreter, // 1: Freud, 2: Jung, 3: Adler, 4: Fromm
+                        dil: "tr" // Türkçe yorum
+                    })
+                });
+                
+                // API yanıtını al
+                const apiResult = await apiResponse.json();
+                
+                if (apiResult.error) {
+                    throw new Error("API hatası: " + apiResult.error);
+                }
+                
+                // Yapay zeka yorumunu al
+                const interpretation = apiResult.interpretation;
+                
+                // Etiketleri hazırla (API'den gelmiyorsa manuel belirleyeceğiz)
+                // Tipik rüya kategorileri
+                const tags = ['Kişisel Gelişim', 'Bilinçaltı', 'Semboller'];
 
                 // Update dreamData with AI results
                 dreamData.interpretation = interpretation;
@@ -102,6 +132,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Update UI
                 document.querySelector('.loading-interpretation').style.display = 'none';
                 document.querySelector('.interpretation').textContent = interpretation;
+                
+                // API'den not gelirse göster
+                if (apiResult.note) {
+                    const notesElement = document.createElement('p');
+                    notesElement.className = 'ai-note';
+                    notesElement.innerHTML = `<strong>Not:</strong> ${apiResult.note}`;
+                    document.querySelector('.interpretation').after(notesElement);
+                }
 
                 // Add tags
                 const tagsContainer = document.querySelector('.tags-container');
@@ -114,8 +152,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
             } catch (error) {
-                console.error('Rüya kaydetme hatası:', error);
-                alert('Rüyanız kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.');
+                console.error('Rüya yorumlama hatası:', error);
+                document.querySelector('.loading-interpretation').style.display = 'none';
+                document.querySelector('.interpretation').textContent = 
+                    "Üzgünüz, rüyanız yorumlanırken bir hata oluştu. Lütfen daha sonra tekrar deneyin.";
+                alert('Rüya yorumlanırken bir hata oluştu: ' + error.message);
             }
         });
     }

@@ -381,7 +381,10 @@
         .dream-loading .fa-spinner {
             animation: spin 1s linear infinite;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @media (max-width: 600px) {
             .dream-card { padding: var(--spacing-lg) var(--spacing-sm); }
@@ -460,6 +463,208 @@
             background: rgba(255, 215, 0, 0.25);
             transform: translateY(-2px);
         }
+
+        /* Dropdown için eklenen stil */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+        
+        .dream-select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-cream);
+            font-size: 1rem;
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 16px;
+        }
+        
+        .dream-select:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+        }
+        
+        .ai-note {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-left: 3px solid var(--accent-gold);
+            background: rgba(255, 215, 0, 0.1);
+            font-style: italic;
+        }
+        
+        /* Yorum sonuçları için eklenen stiller */
+        #dreamResult {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Yükleme göstergesi için geliştirilmiş stiller */
+        .loading-interpretation {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 1rem;
+            color: var(--accent-gold);
+            font-weight: 600;
+            text-align: center;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.1);
+        }
+        
+        .loading-interpretation i {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            animation: spin 1s linear infinite;
+        }
+        
+        .loading-interpretation small {
+            display: block;
+            margin-top: 0.75rem;
+            opacity: 0.8;
+            font-weight: normal;
+            font-style: italic;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .original-dream-container, 
+        .interpretation-container {
+            margin-bottom: 1.5rem;
+        }
+        
+        .original-dream-container h3,
+        .interpretation-container h3 {
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .original-dream,
+        .interpretation {
+            line-height: 1.6;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+        }
+        
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        /* Hata durumu stilleri */
+        .dream-result.error {
+            padding: 1.5rem;
+            background: rgba(255, 77, 77, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 77, 77, 0.3);
+        }
+        
+        .dream-result.error h3 {
+            color: #ff4d4d;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .dream-result.error i.fa-exclamation-triangle {
+            color: #ff4d4d;
+        }
+        
+        .error-actions {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .error-actions ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .error-actions li {
+            margin-bottom: 0.4rem;
+        }
+        
+        /* Sorun giderme bölümü için stil */
+        .troubleshooting-section {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(255, 193, 7, 0.08);
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            border-radius: 10px;
+        }
+        
+        .troubleshooting-section h4 {
+            color: rgba(255, 193, 7, 0.9);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .troubleshooting-section ol {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .troubleshooting-section li {
+            margin-bottom: 0.4rem;
+        }
+        
+        .troubleshooting-section code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+        
+        .retry-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-cream);
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .retry-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -497,12 +702,26 @@
     <div class="dream-center">
         <form class="dream-card" id="dreamForm" autocomplete="off">
             <h1><i class="fas fa-moon"></i> Rüya Yorumlat</h1>
+            <div class="form-group">
+                <label for="interpreter">Yorumlama Yaklaşımı:</label>
+                <select id="interpreter" name="interpreter" class="dream-select">
+                    <option value="1">Sigmund Freud</option>
+                    <option value="2">Carl Jung</option>
+                    <option value="3">Alfred Adler</option>
+                    <option value="4">Erich Fromm</option>
+                </select>
+            </div>
             <label for="dreamText" class="dream-label"><i class="fas fa-feather-alt"></i> Rüyanızı Yazın</label>
             <textarea id="dreamText" class="dream-textarea" placeholder="Rüyanızı detaylıca yazın..."></textarea>
             <button type="submit" class="dream-btn" id="interpretBtn">
                 <i class="fas fa-magic"></i> Yorumla
             </button>
-            <div id="dreamResult"></div>
+            <div id="dreamResult">
+                <!-- Rüya yorumu burada gösterilecek -->
+                <div class="loading-interpretation" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i> Rüyanız yapay zeka tarafından yorumlanıyor...<br><small>(Bu işlem 30 saniye kadar sürebilir)</small>
+                </div>
+            </div>
         </form>
     </div>
     <script type="module">
@@ -558,6 +777,65 @@
         const textarea = document.getElementById('dreamText');
         const resultDiv = document.getElementById('dreamResult');
         const btn = document.getElementById('interpretBtn');
+        const interpreterSelect = document.getElementById('interpreter');
+        
+        // API URL - Ahmet'in bilgisayarındaki Flask API
+        const API_URL = "http://192.168.254.150:5000/yorumla";  // Güncellenmiş IP Adresi
+        
+        // Yerel yorumlama fonksiyonu (API erişilemediğinde)
+        function getLocalInterpretation(dream, interpreter) {
+            // Rüyadaki bazı anahtar kelimeleri tespit etmeye çalış
+            const dreamLower = dream.toLowerCase();
+            
+            let interpretation = "";
+            let tags = ['Bilinçaltı', 'Semboller'];
+            
+            // Seçilen yorumcuya göre genel yorumlama yaklaşımı
+            switch(interpreter) {
+                case "1": // Freud
+                    interpretation = "Freud'un psikanalitik yaklaşımına göre, rüyalarınız bilinçaltınızdaki bastırılmış dürtüleri ve arzuları temsil edebilir. Bu rüya, günlük hayatınızda ifade edemediğiniz duygu ve düşüncelerin bir yansıması olabilir. Bilinçaltınızdaki çatışmaları anlamak için, rüyanızda bulunan sembollerin sizin için kişisel anlamını düşünmeniz faydalı olacaktır.";
+                    tags.push('Psikanaliz');
+                    break;
+                    
+                case "2": // Jung
+                    interpretation = "Jung'un analitik psikoloji yaklaşımına göre, bu rüya kolektif bilinçdışınızdaki arketipsel sembolleri içerebilir. Rüyanız kişisel gelişim sürecinizde bir dönüm noktasını veya içsel bir dönüşümü simgeliyor olabilir. Bireyselleşme yolculuğunuzda size rehberlik eden önemli ipuçları barındırıyor.";
+                    tags.push('Arketipler');
+                    break;
+                    
+                case "3": // Adler
+                    interpretation = "Adler'in bireysel psikoloji anlayışına göre, rüyanız yaşam tarzınızı ve sosyal ilişkilerinizdeki hedeflerinizi yansıtıyor olabilir. Bu rüya, toplum içindeki yeriniz, aidiyet duygunuz ve yetersizlik hislerinizle nasıl başa çıktığınızla ilgili ipuçları veriyor. Yaşamınızda üstesinden gelmeye çalıştığınız zorluklar ve bu konudaki motivasyonunuz rüyada kendini gösteriyor.";
+                    tags.push('Sosyal İlişkiler');
+                    break;
+                    
+                case "4": // Fromm
+                    interpretation = "Fromm'un hümanistik yaklaşımına göre, bu rüya modern toplumda bireysel özgürlüğünüz ve kimliğinizle ilgili endişelerinizi yansıtabilir. Rüyanızda toplumsal normlardan bağımsızlaşma ve kendinizi gerçekleştirme arzunuz görülüyor. Rüyanız, sevgi ve üretkenlik arayışınızın bir ifadesi olarak değerlendirilebilir.";
+                    tags.push('Özgürlük & Kimlik');
+                    break;
+                    
+                default:
+                    interpretation = "Rüyalar, bilinçaltımızın bir yansımasıdır ve genellikle günlük yaşantımızdaki olaylar ve duygularla bağlantılıdır. Bu rüya, hayatınızda yaşadığınız değişimleri veya duygusal durumunuzu yansıtıyor olabilir. Rüyanızı kendi yaşam bağlamınız içinde değerlendirmeniz en sağlıklı yaklaşım olacaktır.";
+            }
+            
+            // Rüya içeriğine göre bazı özel yorumlar ekle
+            if (dreamLower.includes("uçmak") || dreamLower.includes("uçuyorum")) {
+                interpretation += " Rüyanızda uçma deneyimi, özgürlük arzunuzu veya mevcut durumunuzdan uzaklaşma isteğinizi sembolize edebilir. Hayatınızda daha fazla özgürlük ve kontrol arayışında olabilirsiniz.";
+                tags.push('Özgürlük');
+            } else if (dreamLower.includes("düşmek") || dreamLower.includes("düşüyorum")) {
+                interpretation += " Düşme hissi, hayatınızda kontrol edemediğiniz durumlar veya kaygılar yaşadığınızı gösterebilir. Belki de bir konuda güvensizlik hissediyorsunuz veya başarısızlık korkusu yaşıyorsunuz.";
+                tags.push('Kaygı');
+            } else if (dreamLower.includes("su") || dreamLower.includes("deniz") || dreamLower.includes("okyanus")) {
+                interpretation += " Su unsurları bilinçaltınızın derinliklerini ve duygusal durumunuzu temsil eder. Suyun durumu (sakin/dalgalı) duygusal durumunuzla ilgili ipuçları verebilir.";
+                tags.push('Duygular');
+            } else if (dreamLower.includes("kaçmak") || dreamLower.includes("kovalamak")) {
+                interpretation += " Kaçma veya kovalanma temalı rüyalar genellikle hayatınızda kaçındığınız sorunları veya duygularınızı gösterebilir. Yüzleşmekten çekindiğiniz bir durumla ilgili olabilir.";
+                tags.push('Kaçınma');
+            }
+            
+            return {
+                interpretation: interpretation,
+                tags: tags
+            };
+        }
         
         // Kaydedilen rüya verileri
         let currentDreamData = null;
@@ -571,21 +849,101 @@
                 resultDiv.innerHTML = '<div class=\"dream-result\" style=\"color:#ffd700;background:none;\">Lütfen rüyanızı yazın.</div>';
                 return;
             }
-            btn.disabled = true;
-            resultDiv.innerHTML = '<div class=\"dream-loading\"><i class=\"fas fa-spinner\"></i> Yorumlanıyor...</div>';
             
-            // API'den yapay zeka yorumunu al
+            btn.disabled = true;
+            const loadingDiv = resultDiv.querySelector('.loading-interpretation');
+            loadingDiv.style.display = 'block';
+            loadingDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Rüyanız yapay zeka tarafından yorumlanıyor...<br><small>(Bu işlem 30 saniye kadar sürebilir)</small>';
+            
+            // Seçilen yorumcu (default: Freud)
+            const selectedInterpreter = interpreterSelect ? interpreterSelect.value : "1";
+            const interpreterNames = {
+                "1": "Sigmund Freud",
+                "2": "Carl Jung",
+                "3": "Alfred Adler", 
+                "4": "Erich Fromm"
+            };
+            const interpreterName = interpreterNames[selectedInterpreter];
+            
             try {
-                // Simüle AI API - Gerçek uygulamada burada API çağrısı yapılacak
-            await new Promise(r => setTimeout(r, 1800));
+                console.log("API'ye istek gönderiliyor:", API_URL);
                 
-                // Yapay zeka yorumu (gerçek uygulamada API'den gelecek)
-                const interpretation = "Rüyanız, bilinçaltınızda önemli mesajlar barındırıyor. Semboller ve olaylar, günlük yaşantınızla bağlantılı olabilir. " + 
-                    "Bu tür rüyalar genellikle iç dünyanızdaki çatışmaların veya çözülmemiş duyguların bir yansıması olabilir. " +
-                    "Yaşadığınız olayları yeniden değerlendirmeniz ve duygularınızı ifade etmeniz faydalı olabilir.";
+                let interpretation = "";
+                let note = "";
+                let tags = ['Bilinçaltı', 'Semboller', 'Kişisel Gelişim'];
+                let useLocalInterpretation = false;
                 
-                // Rüya etiketleri/kategorileri (gerçek uygulamada API'den gelecek)
-                const tags = ['Kişisel Gelişim', 'Dönüşüm', 'İçsel Yolculuk'];
+                try {
+                    // API isteği için timeout kontrolü ekliyoruz
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => {
+                        console.log("API isteği zaman aşımına uğradı!");
+                        controller.abort();
+                    }, 30000); // 30 saniye timeout (15 saniyeden artırıldı)
+                    
+                    console.log("API isteği gönderiliyor...", API_URL);
+                    
+                    // Ahmet'in bilgisayarındaki API'ye istek gönder
+                    const response = await fetch(API_URL, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            ruya: dream,
+                            secim: selectedInterpreter,
+                            dil: "tr"
+                        }),
+                        signal: controller.signal
+                    }).catch(err => {
+                        console.error("Fetch hatası:", err);
+                        throw err;
+                    });
+                    
+                    // Timeout'u temizle
+                    clearTimeout(timeoutId);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP hata: ${response.status}`);
+                    }
+                    
+                    // API'den gelen yanıtı al
+                    const result = await response.json();
+                    console.log("API yanıtı:", result);
+                    
+                    if (result.error) {
+                        throw new Error(`API hatası: ${result.error}`);
+                    }
+                    
+                    // Yapay zeka yorumunu al
+                    interpretation = result.interpretation || "Üzgünüz, rüyanız yorumlanamadı.";
+                    note = result.note || "";
+                    
+                } catch (apiError) {
+                    // API hatası durumunda yerel yorumlama kullan
+                    console.error("API hatası:", apiError.message, apiError);
+                    useLocalInterpretation = true;
+                    
+                    // Hata türüne göre özel mesaj
+                    let errorDetail = "";
+                    if (apiError.name === "AbortError") {
+                        errorDetail = "Zaman aşımı - API sunucusu yanıt vermedi (30 saniye içinde).";
+                    } else if (apiError.message.includes("fetch") || apiError.message.includes("Failed to fetch")) {
+                        errorDetail = "Bağlantı hatası - API sunucusuna erişilemiyor (ağ bağlantınızı kontrol edin).";
+                    } else if (apiError.message.includes("aborted")) {
+                        errorDetail = "İstek iptal edildi - API sunucusu yanıt vermedi veya bağlantı koptu.";
+                    } else {
+                        errorDetail = apiError.message;
+                    }
+                    
+                    console.log("Yerel yorumlama kullanılıyor. Hata detayı:", errorDetail);
+                    
+                    // Yerel yorumlama kullan
+                    const localResult = getLocalInterpretation(dream, selectedInterpreter);
+                    interpretation = localResult.interpretation;
+                    tags = localResult.tags;
+                    note = `⚠️ API sunucusuna bağlanılamadı (${errorDetail}). Bu yorum yerel olarak oluşturulmuştur.`;
+                }
                 
                 // Rüya verilerini oluştur
                 currentDreamData = {
@@ -596,15 +954,37 @@
                     isFavorite: false
                 };
                 
-                // Yorumu göster
-            resultDiv.innerHTML = `
+                // Sonuç bölümünü göster
+                loadingDiv.style.display = 'none';
+                resultDiv.innerHTML = `
                     <div class="dream-result">
-                        <div class="ai-badge"><i class="fas fa-brain"></i> Yapay Zeka Yorumu</div>
-                        <div><b>Genel Yorum:</b> ${interpretation}</div>
-                        <div style="margin-top:0.5rem;">
-                            <b>Kategoriler:</b> ${tags.map(tag => `<span class="dream-tag">${tag}</span>`).join('')}
+                        <div class="ai-badge"><i class="fas fa-brain"></i> ${interpreterName} Yaklaşımı</div>
+                        <div class="original-dream-container">
+                            <h3>Rüyanız:</h3>
+                            <p class="original-dream">${dream}</p>
                         </div>
-                        <div style="margin-top:0.7rem;"><b>Not:</b> Bu yorum yapay zeka tarafından otomatik olarak oluşturulmuştur.</div>
+                        <div class="interpretation-container">
+                            <h3>Yorum:</h3>
+                            <p class="interpretation">${interpretation}</p>
+                        </div>
+                        ${note ? `<div class="ai-note"><i class="fas fa-info-circle"></i> ${note}</div>` : ''}
+                        <div class="tags-container">
+                            ${tags.map(tag => `<span class="dream-tag">${tag}</span>`).join('')}
+                        </div>
+                        
+                        ${useLocalInterpretation ? `
+                        <div class="troubleshooting-section">
+                            <h4><i class="fas fa-wrench"></i> Bağlantı Sorunları Giderme</h4>
+                            <ol>
+                                <li>Ahmet'in bilgisayarının açık olduğundan emin olun.</li>
+                                <li>Flask API'nin Ahmet'in bilgisayarında çalıştığını doğrulayın.</li>
+                                <li>Aynı ağda olduğunuzdan emin olun (aynı Wi-Fi'ye bağlı olmalısınız).</li>
+                                <li>Güvenlik duvarı veya antivirüs yazılımı bağlantıyı engelliyor olabilir.</li>
+                                <li>Flask uygulamasında CORS ayarlarının düzgün yapılandırıldığını kontrol edin.</li>
+                                <li>API IP adresi: <code>192.168.254.150</code> doğru olduğundan emin olun.</li>
+                            </ol>
+                        </div>
+                        ` : ''}
                         
                         <div class="dream-result-actions">
                             <button class="action-btn favorite-btn ${isFavorite ? 'active' : ''}" id="favoriteBtn" title="${isFavorite ? 'Favorilerden çıkar' : 'Favorilere ekle'}">
@@ -614,8 +994,8 @@
                                 <i class="fas fa-save"></i> Kaydet
                             </button>
                         </div>
-                </div>
-            `;
+                    </div>
+                `;
                 
                 // Butonlara olay dinleyicileri ekle
                 const favoriteBtn = document.getElementById('favoriteBtn');
@@ -626,9 +1006,27 @@
                 
             } catch (error) {
                 console.error('Rüya yorumlama hatası:', error);
-                resultDiv.innerHTML = '<div class=\"dream-result\" style=\"color:#ff4d4d;background:none;\">Rüya yorumlanırken bir hata oluştu. Lütfen tekrar deneyin.</div>';
+                loadingDiv.style.display = 'none';
+                resultDiv.innerHTML = `
+                    <div class="dream-result error">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Hata</h3>
+                        <p>${error.message}</p>
+                        <div class="error-actions">
+                            <p>Lütfen şunları kontrol edin:</p>
+                            <ul>
+                                <li>Internet bağlantınız aktif mi?</li>
+                                <li>Ahmet'in bilgisayarı açık ve API çalışıyor mu?</li>
+                                <li>Aynı ağa bağlı mısınız?</li>
+                            </ul>
+                            <button onclick="window.location.reload()" class="retry-btn">
+                                <i class="fas fa-redo"></i> Tekrar Dene
+                            </button>
+                        </div>
+                    </div>
+                `;
             } finally {
-            btn.disabled = false;
+                btn.disabled = false;
             }
         });
         
