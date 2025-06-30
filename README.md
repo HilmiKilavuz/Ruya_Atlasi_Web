@@ -1,6 +1,6 @@
 # Rüya Atlası  mystical
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 > Yapay zeka destekli rüya yorumları ve kişiselleştirilmiş burç analizleri sunan modern bir mistik keşif platformu.
 
@@ -100,8 +100,5 @@ Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyin:
 
 ---
 
-### 📜 Lisans
-
-Bu proje, **MIT Lisansı** ile lisanslanmıştır. Daha fazla bilgi için `LICENSE` dosyasına bakın.
 
 
